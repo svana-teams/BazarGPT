@@ -119,11 +119,11 @@ export async function GET(
     const transformedData = {
       id: industry.id,
       name: industry.name,
-      categories: industry.categories.map(category => ({
+      categories: industry.categories.map((category: any) => ({
         id: category.id,
         name: category.name,
         url: category.url,
-        subcategories: category.subcategories.map(subcategory => ({
+        subcategories: category.subcategories.map((subcategory: any) => ({
           id: subcategory.id,
           name: subcategory.name,
           url: subcategory.url,
