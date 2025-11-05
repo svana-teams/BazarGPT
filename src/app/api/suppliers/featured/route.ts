@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
       take: 8
     });
 
-    const suppliersWithRating = featuredSuppliers.map((supplier, index) => ({
+    const suppliersWithRating = featuredSuppliers.map((supplier: any) => ({
       id: supplier.id,
       name: supplier.name,
       location: supplier.location || 'Unknown Location',
