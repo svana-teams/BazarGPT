@@ -27,7 +27,7 @@ export async function GET() {
     });
 
     // Transform the data for frontend
-    const featuredProducts = products.map(product => ({
+    const featuredProducts = products.map((product: any) => ({
       id: product.id,
       name: product.name,
       imageUrl: product.imageUrl,

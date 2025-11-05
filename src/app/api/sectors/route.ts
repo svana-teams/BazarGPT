@@ -29,7 +29,7 @@ export async function GET() {
     });
 
     // Transform the data to include product counts
-    const sectorsWithCounts = sectors.map(sector => ({
+    const sectorsWithCounts = sectors.map((sector: any) => ({
       id: sector.id,
       name: sector.name,
       productCount: sector._count.categories
