@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Sector {
+  id         Int        @id @default(autoincrement())
+  name       String     @unique @db.VarChar(255)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  categories Category[]
+
+  @@index([name])
+}
+
+model Category {
+  id            Int           @id @default(autoincrement())
+  name          String        @db.VarChar(255)
+  url           String?
+  sectorId      Int
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  sector        Sector        @relation(fields: [sectorId], references: [id], onDelete: Cascade)
+  subcategories Subcategory[]
+
+  @@unique([sectorId, name])
+  @@index([sectorId])
+  @@index([name])
+}
+
+model Subcategory {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  url        String?
+  categoryId Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  products   Product[]
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, name])
+  @@index([categoryId])
+  @@index([name])
+}
+
+model Supplier {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  location  String?   @db.VarChar(255)
+  gst       String    @default("") @db.VarChar(50)
+  mobile    String    @db.VarChar(20)
+  email     String?   @db.VarChar(255)
+  website   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+
+  @@unique([gst, mobile])
+  @@index([name])
+  @@index([location])
+  @@index([gst])
+}
+
+model Product {
+  id               Int         @id @default(autoincrement())
+  name             String
+  imageUrl         String?
+  price            String?     @db.VarChar(50)
+  priceUnit        String?     @db.VarChar(50)
+  brand            String?     @db.VarChar(255)
+  specifications   Json?
+  productDetailUrl String?
+  subcategoryId    Int
+  supplierId       Int
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  subcategory      Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  supplier         Supplier    @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@index([subcategoryId])
+  @@index([supplierId])
+  @@index([brand])
+}

@@ -6,21 +6,45 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "scrape:aajjo": "node script/scrape-aajjo.js",
+    "scrape:aajjo:suppliers": "node script/scrape-aajjo-suppliers.js",
+    "phones:first5": "node script/fetch-supplier-phones.js",
+    "scrape:aajjo:products": "node script/scrape-aajjo-products.js",
+    "progress": "node script/quick-progress.js",
+    "progress:group1": "./script/check-group1-progress.sh",
+    "progress:group2": "./script/check-group2-progress.sh",
+    "progress:group3": "./script/check-group3-progress.sh",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:seed:optimized": "tsx prisma/seed-optimized.ts",
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset --force --skip-seed"
   },
   "dependencies": {
+    "@prisma/client": "^6.18.0",
+    "@types/uuid": "^10.0.0",
+    "cheerio": "^1.0.0",
+    "dotenv": "^17.2.3",
+    "lucide-react": "^0.546.0",
+    "next": "16.0.0",
+    "openai": "^6.7.0",
+    "perplexity": "^1.0.1",
+    "prisma": "^6.18.0",
+    "puppeteer": "^24.27.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "next": "16.0.0"
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
-    "eslint-config-next": "16.0.0"
+    "eslint-config-next": "16.0.0",
+    "tailwindcss": "^4",
+    "tsx": "^4.20.6",
+    "typescript": "^5"
   }
 }

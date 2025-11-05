@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# Scraping data and scripts (not part of website)
+/data/
+/products/
+/script/
+/transfer-package/
+DATABASE_SETUP.md
+PARALLEL_SCRAPING_GUIDE.md
+TRANSFER_GUIDE.md
+check-progress.ts
