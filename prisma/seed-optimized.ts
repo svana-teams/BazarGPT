@@ -56,16 +56,16 @@ async function main() {
   // Pre-load existing data into cache
   console.log('📥 Loading existing data into cache...');
   const existingSectors = await prisma.sector.findMany();
-  existingSectors.forEach(s => sectorCache.set(s.name, s.id));
+  existingSectors.forEach((s: any) => sectorCache.set(s.name, s.id));
 
   const existingCategories = await prisma.category.findMany();
-  existingCategories.forEach(c => categoryCache.set(`${c.sectorId}:${c.name}`, c.id));
+  existingCategories.forEach((c: any) => categoryCache.set(`${c.sectorId}:${c.name}`, c.id));
 
   const existingSubcategories = await prisma.subcategory.findMany();
-  existingSubcategories.forEach(sc => subcategoryCache.set(`${sc.categoryId}:${sc.name}`, sc.id));
+  existingSubcategories.forEach((sc: any) => subcategoryCache.set(`${sc.categoryId}:${sc.name}`, sc.id));
 
   const existingSuppliers = await prisma.supplier.findMany();
-  existingSuppliers.forEach(s => {
+  existingSuppliers.forEach((s: any) => {
     const key = `${s.gst}:${s.mobile}`;
     supplierCache.set(key, s.id);
   });
