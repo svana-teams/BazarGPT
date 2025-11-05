@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
-    "build": "next build --webpack",
+    "build": "prisma generate && next build --webpack",
     "start": "next start",
+    "postinstall": "prisma generate",
     "lint": "eslint",
     "scrape:aajjo": "node script/scrape-aajjo.js",
     "scrape:aajjo:suppliers": "node script/scrape-aajjo-suppliers.js",
