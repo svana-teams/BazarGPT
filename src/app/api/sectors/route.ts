@@ -42,7 +42,7 @@ export async function GET() {
   } catch (error) {
     console.error('Error fetching sectors:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch sectors', details: error.message },
+      { success: false, error: 'Failed to fetch sectors', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

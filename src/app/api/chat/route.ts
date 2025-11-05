@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Use AI to determine if we should search for suppliers
-    const conversationText = messages.map(m => `${m.role}: ${m.content}`).join('\n');
+    const conversationText = messages.map((m: any) => `${m.role}: ${m.content}`).join('\n');
     
     const analysisPrompt = `Analyze this conversation and determine if we have enough information to search for suppliers. 
 
@@ -80,7 +80,7 @@ Respond with ONLY "YES" if we have a product name and the user seems ready to se
 
     // If AI determines we should search, call Perplexity API
     if (shouldSearch) {
-      const productName = messages.find(m => m.role === 'user')?.content || 'product';
+      const productName = messages.find((m: any) => m.role === 'user')?.content || 'product';
       console.log('Calling Perplexity API for:', productName);
       const perplexityResults = await callPerplexityAPI(productName);
       

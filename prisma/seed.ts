@@ -121,7 +121,7 @@ async function main() {
               create: {
                 name: product.supplier.name,
                 location: product.supplier.location,
-                gst: product.supplier.gst,
+                gst: product.supplier.gst || undefined,
                 email: product.supplier.email,
                 website: product.supplier.website,
                 mobile: product.supplier.mobile,

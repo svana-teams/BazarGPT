@@ -5,11 +5,11 @@ const prisma = new PrismaClient();
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ slug: string }> | { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     // Handle both sync and async params (Next.js 13+ compatibility)
-    const resolvedParams = await Promise.resolve(params);
+    const resolvedParams = await params;
     console.log('Raw params:', resolvedParams);
     console.log('Looking for industry with slug:', resolvedParams?.slug);
     
@@ -139,7 +139,7 @@ export async function GET(
   } catch (error) {
     console.error('Error fetching industry data:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch industry data', details: error.message },
+      { success: false, error: 'Failed to fetch industry data', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }
