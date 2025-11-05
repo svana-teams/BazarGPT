@@ -95,7 +95,7 @@ async function main() {
       for (const item of data) {
         try {
           // Get or create Sector (with caching)
-          let sectorId = sectorCache.get(item.sector);
+          let sectorId: number = sectorCache.get(item.sector) as number;
           if (!sectorId) {
             const sector = await prisma.sector.upsert({
               where: { name: item.sector },
@@ -108,7 +108,7 @@ async function main() {
 
           // Get or create Category (with caching)
           const categoryKey = `${sectorId}:${item.category}`;
-          let categoryId = categoryCache.get(categoryKey);
+          let categoryId: number = categoryCache.get(categoryKey) as number;
           if (!categoryId) {
             const category = await prisma.category.upsert({
               where: {
@@ -129,7 +129,7 @@ async function main() {
 
           // Get or create Subcategory (with caching)
           const subcategoryKey = `${categoryId}:${item.subcategory.name}`;
-          let subcategoryId = subcategoryCache.get(subcategoryKey);
+          let subcategoryId: number = subcategoryCache.get(subcategoryKey) as number;
           if (!subcategoryId) {
             const subcategory = await prisma.subcategory.upsert({
               where: {
@@ -157,7 +157,7 @@ async function main() {
 
             // Get or create Supplier (with caching)
             const supplierKey = `${product.supplier.gst || ''}:${product.supplier.mobile}`;
-            let supplierId = supplierCache.get(supplierKey);
+            let supplierId: number = supplierCache.get(supplierKey) as number;
 
             if (!supplierId) {
               const supplier = await prisma.supplier.upsert({
