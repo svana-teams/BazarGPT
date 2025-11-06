@@ -2,6 +2,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// Python client
+generator client_py {
+  provider = "prisma-client-py"
+  interface            = "sync"
+  recursive_type_depth = 5
+}
+
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
@@ -49,15 +56,16 @@ model Subcategory {
 }
 
 model Supplier {
-  id        Int       @id @default(autoincrement())
-  name      String    @db.VarChar(255)
-  location  String?   @db.VarChar(255)
-  gst       String    @default("") @db.VarChar(50)
-  mobile    String    @db.VarChar(20)
-  email     String?   @db.VarChar(255)
+  id        Int                    @id @default(autoincrement())
+  name      String                 @db.VarChar(255)
+  location  String?                @db.VarChar(255)
+  gst       String                 @default("") @db.VarChar(50)
+  mobile    String                 @db.VarChar(20)
+  email     String?                @db.VarChar(255)
   website   String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime               @default(now())
+  updatedAt DateTime               @updatedAt
+  embedding Unsupported("vector")?
   products  Product[]
 
   @@unique([gst, mobile])
@@ -67,20 +75,21 @@ model Supplier {
 }
 
 model Product {
-  id               Int         @id @default(autoincrement())
+  id               Int                    @id @default(autoincrement())
   name             String
   imageUrl         String?
-  price            String?     @db.VarChar(50)
-  priceUnit        String?     @db.VarChar(50)
-  brand            String?     @db.VarChar(255)
+  price            String?                @db.VarChar(50)
+  priceUnit        String?                @db.VarChar(50)
+  brand            String?                @db.VarChar(255)
   specifications   Json?
   productDetailUrl String?
   subcategoryId    Int
   supplierId       Int
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
-  subcategory      Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
-  supplier         Supplier    @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  embedding        Unsupported("vector")?
+  subcategory      Subcategory            @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  supplier         Supplier               @relation(fields: [supplierId], references: [id], onDelete: Cascade)
 
   @@index([subcategoryId])
   @@index([supplierId])
