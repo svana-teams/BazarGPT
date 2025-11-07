@@ -2,13 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Python client
-generator client_py {
-  provider = "prisma-client-py"
-  interface            = "sync"
-  recursive_type_depth = 5
-}
-
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
@@ -67,6 +60,7 @@ model Supplier {
   updatedAt DateTime               @updatedAt
   embedding Unsupported("vector")?
   products  Product[]
+  enquiries Enquiry[]
 
   @@unique([gst, mobile])
   @@index([name])
@@ -90,8 +84,28 @@ model Product {
   embedding        Unsupported("vector")?
   subcategory      Subcategory            @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
   supplier         Supplier               @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  enquiries        Enquiry[]
 
   @@index([subcategoryId])
   @@index([supplierId])
   @@index([brand])
+}
+
+model Enquiry {
+  id          Int      @id @default(autoincrement())
+  productId   Int
+  supplierId  Int
+  quantity    String?  @db.VarChar(255)
+  location    String?  @db.VarChar(255)
+  phoneNumber String   @db.VarChar(20)
+  status      String   @default("pending") @db.VarChar(50)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  supplier    Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([supplierId])
+  @@index([status])
+  @@index([createdAt])
 }

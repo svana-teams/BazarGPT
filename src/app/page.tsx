@@ -512,7 +512,7 @@ export default function Home() {
                     )}
                     {product.subcategory && (
                       <p className="text-xs mb-2 px-2 py-1 rounded-full inline-block" style={{ backgroundColor: '#ffe8d9', color: '#FF6B00' }}>
-                        {product.subcategory.name} ({product.subcategory.productCount})
+                        {product.subcategory.name}
                       </p>
                     )}
                     <p className="text-xs text-gray-600 truncate">{product.supplier.name}</p>

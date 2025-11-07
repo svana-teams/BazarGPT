@@ -127,7 +127,7 @@ export async function GET(
           id: subcategory.id,
           name: subcategory.name,
           url: subcategory.url,
-          productCount: subcategory._count.products
+          productCount: subcategory._count.products,
         }))
       }))
     };

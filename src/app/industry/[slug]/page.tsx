@@ -31,6 +31,19 @@ export default function IndustryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const handleSubcategoryClick = (subcategory: Subcategory) => {
+    // Create URL-friendly slug from subcategory name
+    const subcategorySlug = subcategory.name
+      .toLowerCase()
+      .replace(/[&]/g, 'and')
+      .replace(/[^a-z0-9\s]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+    
+    router.push(`/subcategory/${subcategorySlug}?id=${subcategory.id}`);
+  };
+
   useEffect(() => {
     const fetchIndustryData = async () => {
       try {
@@ -104,13 +117,17 @@ export default function IndustryPage() {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 mb-4 text-gray-600 hover:text-gray-800 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Industries
-          </button>
+          {/* Breadcrumb */}
+          <div className="text-sm text-gray-500 mb-4">
+            <button 
+              onClick={() => router.push('/')}
+              className="hover:text-orange-600 transition-colors cursor-pointer"
+            >
+              Home
+            </button>
+            {' → '}
+            <span className="text-gray-700">{industryData.name}</span>
+          </div>
           
           <h1 className="text-3xl lg:text-4xl font-bold mb-2" style={{ color: '#2D2C2C' }}>
             {industryData.name}
@@ -138,6 +155,7 @@ export default function IndustryPage() {
                   <div
                     key={subcategory.id}
                     className="flex items-center justify-between py-2 px-3 rounded hover:bg-gray-50 cursor-pointer group transition-colors"
+                    onClick={() => handleSubcategoryClick(subcategory)}
                   >
                     <span className="text-sm text-gray-700 group-hover:text-orange-600 transition-colors">
                       {subcategory.name}
