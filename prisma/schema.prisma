@@ -109,3 +109,17 @@ model Enquiry {
   @@index([status])
   @@index([createdAt])
 }
+
+model RFQ {
+  id          Int      @id @default(autoincrement())
+  productName String?  @db.VarChar(255)
+  quantity    String?  @db.VarChar(255)
+  location    String?  @db.VarChar(255)
+  phoneNumber String   @db.VarChar(20)
+  status      String   @default("pending") @db.VarChar(50)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}

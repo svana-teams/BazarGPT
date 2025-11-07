@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, ShoppingCart, User, Menu, ChevronDown, Mail, Phone, MapPin } from 'lucide-react';
+import { Search, ShoppingCart, User, Menu, ChevronDown, Mail, Phone, MapPin, X } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -63,6 +63,15 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [industriesLoading, setIndustriesLoading] = useState(true);
   const [productsLoading, setProductsLoading] = useState(true);
+  const [showRFQModal, setShowRFQModal] = useState(false);
+  const [rfqForm, setRfqForm] = useState({
+    productName: '',
+    quantity: '',
+    location: '',
+    phoneNumber: ''
+  });
+  const [rfqValidationError, setRfqValidationError] = useState('');
+  const [isRfqSubmitting, setIsRfqSubmitting] = useState(false);
 
   const categories = ['All Categories', ...industries.map(industry => industry.name)];
 
@@ -162,6 +171,71 @@ export default function Home() {
         break;
       default:
         console.log(`View all clicked for: ${section}`);
+    }
+  };
+
+  const handleRFQOpen = () => {
+    setShowRFQModal(true);
+  };
+
+  const handleRFQClose = () => {
+    setShowRFQModal(false);
+    setRfqForm({
+      productName: '',
+      quantity: '',
+      location: '',
+      phoneNumber: ''
+    });
+    setRfqValidationError('');
+    setIsRfqSubmitting(false);
+  };
+
+  const handleRFQSubmit = async () => {
+    // Clear previous validation error
+    setRfqValidationError('');
+
+    // Only phone number is mandatory
+    if (!rfqForm.phoneNumber.trim()) {
+      setRfqValidationError('Please enter your phone number');
+      return;
+    }
+
+    setIsRfqSubmitting(true);
+
+    try {
+      const response = await fetch('/api/rfq', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productName: rfqForm.productName.trim() || null,
+          quantity: rfqForm.quantity.trim() || null,
+          location: rfqForm.location.trim() || null,
+          phoneNumber: rfqForm.phoneNumber.trim()
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert('Your Request for Quotation has been submitted successfully!');
+        handleRFQClose();
+      } else {
+        setRfqValidationError(result.error || 'Failed to submit RFQ');
+      }
+    } catch (error) {
+      console.error('Error submitting RFQ:', error);
+      setRfqValidationError('Network error. Please try again.');
+    } finally {
+      setIsRfqSubmitting(false);
+    }
+  };
+
+  const handleScrollToProducts = () => {
+    const element = document.getElementById('top-products');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -352,6 +426,7 @@ export default function Home() {
           <p className="mb-6 text-base lg:text-lg" style={{ color: '#e0e0e0' }}>Connect with millions of B2B buyers and sellers worldwide</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
+              onClick={handleRFQOpen}
               className="px-6 lg:px-8 py-3 rounded-md font-semibold transition-all shadow-md hover:shadow-lg text-sm lg:text-base"
               style={{ backgroundColor: '#FF6B00', color: 'white' }}
               onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e55e00'}
@@ -360,6 +435,7 @@ export default function Home() {
               Request for Quotation
             </button>
             <button
+              onClick={handleScrollToProducts}
               className="px-6 lg:px-8 py-3 border-2 rounded-md font-semibold transition-all text-sm lg:text-base"
               style={{ borderColor: 'white', color: 'white', backgroundColor: 'transparent' }}
               onMouseOver={(e) => {
@@ -440,7 +516,7 @@ export default function Home() {
         </div>
 
         {/* Top Products */}
-        <div className="mb-8 lg:mb-12">
+        <div id="top-products" className="mb-8 lg:mb-12">
           <div className="flex items-center justify-between mb-4 lg:mb-6">
             <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>Top Products</h2>
             <button
@@ -763,6 +839,119 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Request for Quotation Modal */}
+      {showRFQModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold" style={{ color: '#2D2C2C' }}>
+                Request for Quotation
+              </h2>
+              <button
+                onClick={handleRFQClose}
+                className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6">
+              {/* Validation Error */}
+              {rfqValidationError && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                  <p className="text-sm text-red-600">{rfqValidationError}</p>
+                </div>
+              )}
+
+              {/* RFQ Form */}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Product Name
+                  </label>
+                  <input
+                    type="text"
+                    value={rfqForm.productName}
+                    onChange={(e) => setRfqForm({ ...rfqForm, productName: e.target.value })}
+                    placeholder="e.g., LED Light Bulbs, Steel Pipes, etc."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Quantity Required
+                  </label>
+                  <input
+                    type="text"
+                    value={rfqForm.quantity}
+                    onChange={(e) => setRfqForm({ ...rfqForm, quantity: e.target.value })}
+                    placeholder="e.g., 100 pieces, 500 kg, etc."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Your Location
+                  </label>
+                  <input
+                    type="text"
+                    value={rfqForm.location}
+                    onChange={(e) => setRfqForm({ ...rfqForm, location: e.target.value })}
+                    placeholder="City, State, Country"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    value={rfqForm.phoneNumber}
+                    onChange={(e) => setRfqForm({ ...rfqForm, phoneNumber: e.target.value })}
+                    placeholder="+1 234 567 8900"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              {/* Modal Actions */}
+              <div className="flex gap-3 mt-6 pt-4 border-t border-gray-200">
+                <button
+                  onClick={handleRFQClose}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleRFQSubmit}
+                  disabled={isRfqSubmitting}
+                  className="flex-1 px-4 py-2 rounded-md text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ backgroundColor: isRfqSubmitting ? '#ccc' : '#FF6B00' }}
+                  onMouseOver={(e) => {
+                    if (!isRfqSubmitting) {
+                      e.currentTarget.style.backgroundColor = '#e55e00';
+                    }
+                  }}
+                  onMouseOut={(e) => {
+                    if (!isRfqSubmitting) {
+                      e.currentTarget.style.backgroundColor = '#FF6B00';
+                    }
+                  }}
+                >
+                  {isRfqSubmitting ? 'Sending...' : 'Submit Request'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
