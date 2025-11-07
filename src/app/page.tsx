@@ -42,6 +42,10 @@ interface Product {
     name: string;
     location: string;
   };
+  subcategory?: {
+    name: string;
+    productCount: number;
+  };
   category: string;
   industry: string;
 }
@@ -54,6 +58,8 @@ export default function Home() {
   const [featuredSuppliers, setFeaturedSuppliers] = useState<Supplier[]>([]);
   const [industries, setIndustries] = useState<Industry[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [allSubcategoryProducts, setAllSubcategoryProducts] = useState<Product[]>([]);
+  const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [industriesLoading, setIndustriesLoading] = useState(true);
   const [productsLoading, setProductsLoading] = useState(true);
@@ -196,11 +202,14 @@ export default function Home() {
 
     const fetchFeaturedProducts = async () => {
       try {
-        const response = await fetch('/api/products/featured');
+        const response = await fetch('/api/products/top-subcategories');
         const result = await response.json();
         
         if (result.success) {
-          setFeaturedProducts(result.data);
+          setAllSubcategoryProducts(result.data);
+          // Randomly select 5 products immediately when data is loaded
+          const shuffled = [...result.data].sort(() => 0.5 - Math.random());
+          setFeaturedProducts(shuffled.slice(0, 5));
         } else {
           console.error('Failed to fetch featured products:', result.error);
         }
@@ -216,6 +225,7 @@ export default function Home() {
     fetchFeaturedProducts();
   }, []);
 
+
   return (
     <div className="min-h-screen overflow-x-hidden" style={{ backgroundColor: '#FAF8F4' }}>
       {/* Top Bar */}
@@ -228,13 +238,13 @@ export default function Home() {
             </span>
             <span className="flex items-center gap-1">
               <Mail className="w-3 h-3" />
-              support@bizgpt.com
+              support@bazargpt.com
             </span>
           </div>
           <div className="flex gap-4">
             <button className="transition-colors" style={{ color: 'white' }} onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Buyer Central</button>
             <button className="transition-colors" style={{ color: 'white' }} onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Seller Central</button>
-            <button className="transition-colors" style={{ color: 'white' }} onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Help</button>
+            <button onClick={() => router.push('/help')} className="transition-colors" style={{ color: 'white' }} onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Help</button>
           </div>
         </div>
       </div>
@@ -245,7 +255,7 @@ export default function Home() {
           <div className="flex items-center gap-4 lg:gap-8 min-w-0">
             {/* Logo */}
             <div className="flex items-center gap-2 flex-shrink-0">
-              <div className="text-xl lg:text-2xl font-bold" style={{ color: '#FF6B00' }}>BizGPT</div>
+              <div className="text-xl lg:text-2xl font-bold" style={{ color: '#FF6B00' }}>BazarGPT</div>
               <div className="text-xs hidden sm:block" style={{ color: '#2D2C2C' }}>B2B Marketplace</div>
             </div>
 
@@ -328,7 +338,7 @@ export default function Home() {
               <button className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Featured Selections</button>
               <button className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Trade Assurance</button>
               <button className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Buyer Protection</button>
-              <button className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Help Center</button>
+              <button onClick={() => router.push('/help')} className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Help Center</button>
             </div>
           </div>
         </div>
@@ -463,10 +473,13 @@ export default function Home() {
                 </div>
               ))
             ) : (
-              featuredProducts.slice(0, 5).map((product) => (
+              featuredProducts.slice(0, 5).map((product, index) => (
                 <div
-                  key={product.id}
-                  className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all cursor-pointer group"
+                  key={`${product.id}-${currentProductIndex}`}
+                  className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all cursor-pointer group animate-fadeIn"
+                  style={{
+                    animationDelay: `${index * 100}ms`
+                  }}
                 >
                   <div className="bg-gray-100 h-32 lg:h-40 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
                     {product.imageUrl ? (
@@ -495,7 +508,12 @@ export default function Home() {
                       {product.price ? `${product.price}${product.priceUnit ? `/${product.priceUnit}` : ''}` : 'Price on request'}
                     </p>
                     {product.brand && (
-                      <p className="text-xs text-gray-500 mb-2">Brand: {product.brand}</p>
+                      <p className="text-xs text-gray-500 mb-1">Brand: {product.brand}</p>
+                    )}
+                    {product.subcategory && (
+                      <p className="text-xs mb-2 px-2 py-1 rounded-full inline-block" style={{ backgroundColor: '#ffe8d9', color: '#FF6B00' }}>
+                        {product.subcategory.name} ({product.subcategory.productCount})
+                      </p>
                     )}
                     <p className="text-xs text-gray-600 truncate">{product.supplier.name}</p>
                     <p className="text-xs text-gray-500 truncate">{product.supplier.location}</p>
@@ -725,7 +743,7 @@ export default function Home() {
             <div>
               <h4 className="font-semibold mb-4">For Suppliers</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Sell on BizGPT</a></li>
+                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Sell on BazarGPT</a></li>
                 <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Supplier Membership</a></li>
                 <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Learning Center</a></li>
               </ul>
@@ -733,14 +751,14 @@ export default function Home() {
             <div>
               <h4 className="font-semibold mb-4">Help & Support</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Help Center</a></li>
+                <li><button onClick={() => router.push('/help')} className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Help Center</button></li>
                 <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Report Abuse</a></li>
                 <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Submit Dispute</a></li>
               </ul>
             </div>
           </div>
           <div className="mt-6 lg:mt-8 pt-6 lg:pt-8 text-center text-xs lg:text-sm text-gray-400" style={{ borderTop: '1px solid #1a2f47' }}>
-            <p>&copy; 2024 BizGPT. All rights reserved.</p>
+            <p>&copy; 2024 BazarGPT. All rights reserved.</p>
             <p className="mt-2 lg:mt-0 lg:inline"> | Privacy Policy | Terms of Use</p>
           </div>
         </div>

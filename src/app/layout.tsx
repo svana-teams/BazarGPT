@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BizGPT - B2B Product & Supplier Finder",
+  title: "BazarGPT - B2B Product & Supplier Finder",
   description: "AI-powered B2B platform to find suppliers and get quotes for your business needs",
 };
 
