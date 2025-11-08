@@ -733,37 +733,11 @@ export default function Home() {
       {/* Footer */}
       <footer className="text-white mt-8 lg:mt-16" style={{ backgroundColor: '#0D1B2A' }}>
         <div className="max-w-7xl mx-auto px-4 py-8 lg:py-12">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 w-full">
+          <div className="flex justify-center">
             <div>
-              <h4 className="font-semibold mb-4">About Us</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Company Profile</a></li>
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Contact Us</a></li>
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Careers</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">For Buyers</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Post Buying Request</a></li>
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Browse Products</a></li>
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Buyer Protection</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">For Suppliers</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Sell on BazarGPT</a></li>
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Supplier Membership</a></li>
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Learning Center</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Help & Support</h4>
+              <h4 className="font-semibold mb-4 text-center">Help & Support</h4>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li><button onClick={() => router.push('/help')} className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Help Center</button></li>
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Report Abuse</a></li>
-                <li><a href="#" className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Submit Dispute</a></li>
               </ul>
             </div>
           </div>

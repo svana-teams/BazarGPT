@@ -198,65 +198,80 @@ export default function SubcategoryPage() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#FAF8F4' }}>
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 lg:mb-8">
           {/* Breadcrumb */}
-          <div className="text-sm text-gray-500 mb-4">
-            <button 
-              onClick={() => router.push('/')}
-              className="hover:text-orange-600 transition-colors cursor-pointer"
-            >
-              Home
-            </button>
-            {' → '}
-            <button 
-              onClick={() => {
-                const sectorSlug = subcategoryData.category.sector.name
-                  .toLowerCase()
-                  .replace(/[&]/g, 'and')
-                  .replace(/[^a-z0-9\s]/g, '')
-                  .replace(/\s+/g, '-')
-                  .replace(/-+/g, '-')
-                  .replace(/^-|-$/g, '');
-                router.push(`/industry/${sectorSlug}`);
-              }}
-              className="hover:text-orange-600 transition-colors cursor-pointer"
-            >
-              {subcategoryData.category.sector.name}
-            </button>
-            {' → '}
-            <button 
-              onClick={() => {
-                const sectorSlug = subcategoryData.category.sector.name
-                  .toLowerCase()
-                  .replace(/[&]/g, 'and')
-                  .replace(/[^a-z0-9\s]/g, '')
-                  .replace(/\s+/g, '-')
-                  .replace(/-+/g, '-')
-                  .replace(/^-|-$/g, '');
-                router.push(`/industry/${sectorSlug}`);
-              }}
-              className="hover:text-orange-600 transition-colors cursor-pointer"
-            >
-              {subcategoryData.category.name}
-            </button>
-            {' → '}
-            <span className="text-gray-700">{subcategoryData.name}</span>
+          <div className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">
+            {/* Mobile: Show simplified breadcrumb */}
+            <div className="flex flex-wrap items-center gap-1 sm:hidden">
+              <button 
+                onClick={() => router.push('/')}
+                className="hover:text-orange-600 transition-colors cursor-pointer"
+              >
+                Home
+              </button>
+              <span>→</span>
+              <span className="text-gray-700 font-medium">{subcategoryData.name}</span>
+            </div>
+            
+            {/* Desktop: Show full breadcrumb */}
+            <div className="hidden sm:flex sm:flex-wrap sm:items-center sm:gap-2">
+              <button 
+                onClick={() => router.push('/')}
+                className="hover:text-orange-600 transition-colors cursor-pointer"
+              >
+                Home
+              </button>
+              <span>→</span>
+              <button 
+                onClick={() => {
+                  const sectorSlug = subcategoryData.category.sector.name
+                    .toLowerCase()
+                    .replace(/[&]/g, 'and')
+                    .replace(/[^a-z0-9\s]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .replace(/^-|-$/g, '');
+                  router.push(`/industry/${sectorSlug}`);
+                }}
+                className="hover:text-orange-600 transition-colors cursor-pointer"
+              >
+                {subcategoryData.category.sector.name}
+              </button>
+              <span>→</span>
+              <button 
+                onClick={() => {
+                  const sectorSlug = subcategoryData.category.sector.name
+                    .toLowerCase()
+                    .replace(/[&]/g, 'and')
+                    .replace(/[^a-z0-9\s]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .replace(/^-|-$/g, '');
+                  router.push(`/industry/${sectorSlug}`);
+                }}
+                className="hover:text-orange-600 transition-colors cursor-pointer"
+              >
+                {subcategoryData.category.name}
+              </button>
+              <span>→</span>
+              <span className="text-gray-700">{subcategoryData.name}</span>
+            </div>
           </div>
           
-          <h1 className="text-3xl lg:text-4xl font-bold mb-2" style={{ color: '#2D2C2C' }}>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2" style={{ color: '#2D2C2C' }}>
             {subcategoryData.name}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600">
             {subcategoryData.totalProducts} products available
           </p>
         </div>
 
         {/* Main Content Area */}
-        <div className="flex gap-6">
-          {/* Left Sidebar - Filter Space */}
-          <div className="w-64 flex-shrink-0">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
+          {/* Left Sidebar - Filter Space - Hidden on mobile */}
+          <div className="hidden lg:block lg:w-64 lg:flex-shrink-0">
             <div className="bg-white rounded-lg border border-gray-200 p-4">
               <h3 className="font-medium text-gray-800 mb-4">Filters</h3>
               <p className="text-sm text-gray-500">Filter options will be available here</p>
@@ -264,14 +279,14 @@ export default function SubcategoryPage() {
           </div>
 
           {/* Right Content Area */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             {/* View Toggle */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div className="text-sm text-gray-600">
                 Showing {subcategoryData.products.length} of {subcategoryData.totalProducts} products
               </div>
               
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 self-end sm:self-auto">
                 <button
                   onClick={() => setViewMode('grid')}
                   className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-orange-100 text-orange-600' : 'text-gray-600 hover:bg-gray-100'}`}
@@ -290,7 +305,7 @@ export default function SubcategoryPage() {
             {/* Products Grid */}
             {subcategoryData.products.length > 0 ? (
               <div className={viewMode === 'grid' 
-                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" 
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6" 
                 : "space-y-4"
               }>
             {subcategoryData.products.map((product) => (
@@ -299,7 +314,7 @@ export default function SubcategoryPage() {
                   key={product.id}
                   className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all cursor-pointer group"
                 >
-                  <div className="bg-gray-100 h-48 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                  <div className="bg-gray-100 h-32 sm:h-40 md:h-48 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
                     {product.imageUrl ? (
                       <img 
                         src={product.imageUrl} 
@@ -314,15 +329,15 @@ export default function SubcategoryPage() {
                         }}
                       />
                     ) : null}
-                    <div className={`text-6xl ${product.imageUrl ? 'hidden' : 'flex'} items-center justify-center w-full h-full`}>
+                    <div className={`text-4xl sm:text-5xl md:text-6xl ${product.imageUrl ? 'hidden' : 'flex'} items-center justify-center w-full h-full`}>
                       📦
                     </div>
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-medium mb-2 text-sm line-clamp-2 transition-colors group-hover:text-[#FF6B00]" style={{ color: '#2D2C2C' }}>
+                  <div className="p-3 sm:p-4">
+                    <h3 className="font-medium mb-2 text-xs sm:text-sm line-clamp-2 transition-colors group-hover:text-[#FF6B00]" style={{ color: '#2D2C2C' }}>
                       {product.name}
                     </h3>
-                    <p className="font-bold text-base mb-2" style={{ color: '#FF6B00' }}>
+                    <p className="font-bold text-sm sm:text-base mb-2" style={{ color: '#FF6B00' }}>
                       {product.price ? `${product.price}${product.priceUnit ? `/${product.priceUnit}` : ''}` : 'Price on request'}
                     </p>
                     {product.brand && (
@@ -331,7 +346,7 @@ export default function SubcategoryPage() {
                     <p className="text-xs text-gray-600 truncate">{product.supplier.name}</p>
                     <p className="text-xs text-gray-500 truncate mb-3">{product.supplier.location}</p>
                     <button
-                      className="w-full py-2 border rounded-md transition-colors text-sm font-medium"
+                      className="w-full py-2 border rounded-md transition-colors text-xs sm:text-sm font-medium"
                       style={{ borderColor: '#FF6B00', color: '#FF6B00' }}
                       onMouseOver={(e) => {
                         e.currentTarget.style.backgroundColor = '#ffe8d9';
@@ -348,10 +363,10 @@ export default function SubcategoryPage() {
               ) : (
                 <div
                   key={product.id}
-                  className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all cursor-pointer"
+                  className="bg-white border border-gray-200 rounded-lg p-3 sm:p-4 hover:shadow-md transition-all cursor-pointer"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
                       {product.imageUrl ? (
                         <img 
                           src={product.imageUrl} 
@@ -366,28 +381,28 @@ export default function SubcategoryPage() {
                           }}
                         />
                       ) : null}
-                      <div className={`text-2xl ${product.imageUrl ? 'hidden' : 'flex'} items-center justify-center w-full h-full`}>
+                      <div className={`text-xl sm:text-2xl ${product.imageUrl ? 'hidden' : 'flex'} items-center justify-center w-full h-full`}>
                         📦
                       </div>
                     </div>
                     
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-medium mb-1 text-gray-800 line-clamp-2">
+                    <div className="flex-1 min-w-0 text-center sm:text-left">
+                      <h3 className="font-medium mb-1 text-sm sm:text-base text-gray-800 line-clamp-2">
                         {product.name}
                       </h3>
-                      <p className="font-bold text-lg mb-2" style={{ color: '#FF6B00' }}>
+                      <p className="font-bold text-base sm:text-lg mb-2" style={{ color: '#FF6B00' }}>
                         {product.price ? `${product.price}${product.priceUnit ? `/${product.priceUnit}` : ''}` : 'Price on request'}
                       </p>
-                      <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-gray-600 mb-3">
                         {product.brand && <span>Brand: {product.brand}</span>}
                         <span>{product.supplier.name}</span>
                         <span>{product.supplier.location}</span>
                       </div>
                     </div>
                     
-                    <div className="flex-shrink-0">
+                    <div className="flex-shrink-0 w-full sm:w-auto">
                       <button
-                        className="px-6 py-2 border rounded-md transition-colors text-sm font-medium"
+                        className="w-full sm:w-auto px-4 sm:px-6 py-2 border rounded-md transition-colors text-xs sm:text-sm font-medium"
                         style={{ borderColor: '#FF6B00', color: '#FF6B00' }}
                         onMouseOver={(e) => {
                           e.currentTarget.style.backgroundColor = '#ffe8d9';
@@ -417,10 +432,10 @@ export default function SubcategoryPage() {
         {/* Contact Supplier Modal */}
         {showContactModal && selectedProduct && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto mx-4">
               {/* Modal Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                <h2 className="text-xl font-semibold" style={{ color: '#2D2C2C' }}>
+              <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
+                <h2 className="text-lg sm:text-xl font-semibold" style={{ color: '#2D2C2C' }}>
                   Contact Supplier
                 </h2>
                 <button
@@ -432,7 +447,7 @@ export default function SubcategoryPage() {
               </div>
 
               {/* Modal Content */}
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 {/* Product Info */}
                 <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                   <h3 className="font-medium text-gray-800 mb-2">Product Details</h3>
