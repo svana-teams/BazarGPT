@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Menu, ChevronDown, Mail, Phone, MapPin, X } from 'lucide-react';
+import { Search, Menu, Mail, Phone, MapPin, X } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -52,8 +52,6 @@ interface Product {
 export default function Home() {
   const router = useRouter();
   const [searchValue, setSearchValue] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All Categories');
-  const [showCategories, setShowCategories] = useState(false);
   const [featuredSuppliers, setFeaturedSuppliers] = useState<Supplier[]>([]);
   const [industries, setIndustries] = useState<Industry[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
@@ -72,7 +70,6 @@ export default function Home() {
   const [rfqValidationError, setRfqValidationError] = useState('');
   const [isRfqSubmitting, setIsRfqSubmitting] = useState(false);
 
-  const categories = ['All Categories', ...industries.map(industry => industry.name)];
 
   const popularSearches = [
     'LED lights', 'Solar panels', 'Water pump', 'Plastic mold',
@@ -326,43 +323,16 @@ export default function Home() {
             </div>
 
             {/* Search Bar */}
-            <div className="flex-1 flex items-stretch max-w-3xl min-w-0">
+            <div className="flex-1 flex items-stretch max-w-4xl min-w-0">
               <div className="relative flex-1 flex min-w-0">
-                {/* Category Dropdown */}
-                <button
-                  onClick={() => setShowCategories(!showCategories)}
-                  className="px-3 lg:px-4 py-2 lg:py-3 bg-gray-50 border border-gray-300 border-r-0 rounded-l-md hover:bg-gray-100 flex items-center gap-2 min-w-[120px] lg:min-w-[160px] justify-between text-xs lg:text-sm flex-shrink-0"
-                >
-                  <span className="text-gray-700 truncate">{selectedCategory}</span>
-                  <ChevronDown className="w-4 h-4 text-gray-500" />
-                </button>
-
-                {/* Dropdown Menu */}
-                {showCategories && (
-                  <div className="absolute top-full left-0 mt-1 w-[200px] lg:w-[250px] bg-white border border-gray-300 rounded-md shadow-lg max-h-96 overflow-y-auto z-50">
-                    {categories.map((cat) => (
-                      <button
-                        key={cat}
-                        onClick={() => {
-                          setSelectedCategory(cat);
-                          setShowCategories(false);
-                        }}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-orange-50 hover:text-orange-600 transition-colors"
-                      >
-                        {cat}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
                 {/* Search Input */}
                 <input
                   type="text"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="What are you looking for..."
-                  className="flex-1 px-3 lg:px-4 py-2 lg:py-3 border-t border-b border-gray-300 focus:outline-none text-gray-900 text-sm lg:text-base min-w-0"
+                  placeholder="Search products, suppliers, categories..."
+                  className="flex-1 px-3 sm:px-4 lg:px-5 py-2 lg:py-3 border border-gray-300 rounded-l-md focus:outline-none text-gray-900 text-sm lg:text-base min-w-0"
                   style={{ borderColor: '#e5e5e5' }}
                   onFocus={(e) => e.currentTarget.style.borderColor = '#FF6B00'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#e5e5e5'}
@@ -371,13 +341,13 @@ export default function Home() {
                 {/* Search Button */}
                 <button
                   onClick={handleSearch}
-                  className="px-4 lg:px-6 py-2 lg:py-3 text-white rounded-r-md transition-colors flex items-center gap-2 justify-center flex-shrink-0"
+                  className="px-4 sm:px-6 lg:px-8 py-2 lg:py-3 text-white rounded-r-md border-l-0 transition-colors flex items-center gap-2 justify-center flex-shrink-0"
                   style={{ backgroundColor: '#FF6B00' }}
                   onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e55e00'}
                   onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#FF6B00'}
                 >
                   <Search className="w-4 lg:w-5 h-4 lg:h-5" />
-                  <span className="font-medium text-sm lg:text-base">Search</span>
+                  <span className="font-medium text-sm lg:text-base hidden sm:inline">Search</span>
                 </button>
               </div>
             </div>
