@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ChevronRight, X } from 'lucide-react';
 
 interface Subcategory {
   id: number;
   name: string;
   url: string | null;
-  productCount: number;
 }
 
 interface Category {
@@ -30,6 +29,15 @@ export default function IndustryPage() {
   const [industryData, setIndustryData] = useState<IndustryData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [modalCategory, setModalCategory] = useState<Category | null>(null);
+
+  const handleOpenModal = (category: Category) => {
+    setModalCategory(category);
+  };
+
+  const handleCloseModal = () => {
+    setModalCategory(null);
+  };
 
   const handleSubcategoryClick = (subcategory: Subcategory) => {
     // Create URL-friendly slug from subcategory name
@@ -114,11 +122,11 @@ export default function IndustryPage() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#FAF8F4' }}>
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6">
           {/* Breadcrumb */}
-          <div className="text-sm text-gray-500 mb-4">
+          <div className="text-sm text-gray-500 mb-3">
             <button 
               onClick={() => router.push('/')}
               className="hover:text-orange-600 transition-colors cursor-pointer"
@@ -129,49 +137,41 @@ export default function IndustryPage() {
             <span className="text-gray-700">{industryData.name}</span>
           </div>
           
-          <h1 className="text-3xl lg:text-4xl font-bold mb-2" style={{ color: '#2D2C2C' }}>
+          <h1 className="text-3xl lg:text-4xl font-bold" style={{ color: '#2D2C2C' }}>
             {industryData.name}
           </h1>
-          <p className="text-gray-600">
-            {industryData.categories.length} categories • {' '}
-            {industryData.categories.reduce((total, cat) => total + cat.subcategories.length, 0)} subcategories
-          </p>
         </div>
 
         {/* Categories Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {industryData.categories.map((category) => (
             <div
               key={category.id}
-              className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-all"
+              className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-lg transition-all"
               style={{ borderColor: '#e5e5e5' }}
             >
-              <h3 className="text-lg font-semibold mb-4" style={{ color: '#2D2C2C' }}>
+              <h3 className="text-lg font-semibold mb-3" style={{ color: '#2D2C2C' }}>
                 {category.name}
               </h3>
               
-              <div className="space-y-2">
+              <div className="space-y-1">
                 {category.subcategories.slice(0, 5).map((subcategory) => (
                   <div
                     key={subcategory.id}
-                    className="flex items-center justify-between py-2 px-3 rounded hover:bg-gray-50 cursor-pointer group transition-colors"
+                    className="flex items-center justify-between py-1.5 px-2 rounded hover:bg-gray-50 cursor-pointer group transition-colors"
                     onClick={() => handleSubcategoryClick(subcategory)}
                   >
                     <span className="text-sm text-gray-700 group-hover:text-orange-600 transition-colors">
                       {subcategory.name}
                     </span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500">
-                        {subcategory.productCount > 0 ? `${subcategory.productCount} products` : 'Available'}
-                      </span>
-                      <ChevronRight className="w-3 h-3 text-gray-400 group-hover:text-orange-600 transition-colors" />
-                    </div>
+                    <ChevronRight className="w-3 h-3 text-gray-400 group-hover:text-orange-600 transition-colors" />
                   </div>
                 ))}
                 
                 {category.subcategories.length > 5 && (
                   <div className="pt-2 mt-2 border-t border-gray-100">
                     <button 
+                      onClick={() => handleOpenModal(category)}
                       className="text-sm font-medium flex items-center gap-1 transition-colors"
                       style={{ color: '#FF6B00' }}
                       onMouseOver={(e) => e.currentTarget.style.color = '#e55e00'}
@@ -194,6 +194,47 @@ export default function IndustryPage() {
           </div>
         )}
       </div>
+
+      {/* Subcategories Modal */}
+      {modalCategory && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[80vh] overflow-hidden">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold" style={{ color: '#2D2C2C' }}>
+                {modalCategory.name}
+              </h2>
+              <button
+                onClick={handleCloseModal}
+                className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {modalCategory.subcategories.map((subcategory) => (
+                  <div
+                    key={subcategory.id}
+                    className="flex items-center justify-between py-2 px-3 rounded hover:bg-gray-50 cursor-pointer group transition-colors border border-gray-100"
+                    onClick={() => {
+                      handleSubcategoryClick(subcategory);
+                      handleCloseModal();
+                    }}
+                  >
+                    <span className="text-sm text-gray-700 group-hover:text-orange-600 transition-colors">
+                      {subcategory.name}
+                    </span>
+                    <ChevronRight className="w-3 h-3 text-gray-400 group-hover:text-orange-600 transition-colors" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

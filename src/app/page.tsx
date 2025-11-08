@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, ShoppingCart, User, Menu, ChevronDown, Mail, Phone, MapPin, X } from 'lucide-react';
+import { Search, Menu, ChevronDown, Mail, Phone, MapPin, X } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -163,9 +163,6 @@ export default function Home() {
       case 'suppliers':
         router.push('/suppliers');
         break;
-      case 'trending':
-        router.push('/trending');
-        break;
       default:
         console.log(`View all clicked for: ${section}`);
     }
@@ -305,7 +302,7 @@ export default function Home() {
           <div className="flex gap-4">
             <span className="flex items-center gap-1">
               <Phone className="w-3 h-3" />
-              +91-1800-XXX-XXXX
+              +91-8431209936
             </span>
             <span className="flex items-center gap-1">
               <Mail className="w-3 h-3" />
@@ -313,8 +310,6 @@ export default function Home() {
             </span>
           </div>
           <div className="flex gap-4">
-            <button className="transition-colors" style={{ color: 'white' }} onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Buyer Central</button>
-            <button className="transition-colors" style={{ color: 'white' }} onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Seller Central</button>
             <button onClick={() => router.push('/help')} className="transition-colors" style={{ color: 'white' }} onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Help</button>
           </div>
         </div>
@@ -331,12 +326,12 @@ export default function Home() {
             </div>
 
             {/* Search Bar */}
-            <div className="flex-1 flex items-center max-w-3xl min-w-0">
-              <div className="relative flex-1 flex flex-col sm:flex-row min-w-0">
+            <div className="flex-1 flex items-stretch max-w-3xl min-w-0">
+              <div className="relative flex-1 flex min-w-0">
                 {/* Category Dropdown */}
                 <button
                   onClick={() => setShowCategories(!showCategories)}
-                  className="px-3 lg:px-4 py-2 lg:py-3 bg-gray-50 border border-gray-300 sm:border-r-0 rounded-md sm:rounded-l-md sm:rounded-r-none hover:bg-gray-100 flex items-center gap-2 w-full sm:min-w-[120px] lg:min-w-[160px] justify-between text-xs lg:text-sm mb-2 sm:mb-0"
+                  className="px-3 lg:px-4 py-2 lg:py-3 bg-gray-50 border border-gray-300 border-r-0 rounded-l-md hover:bg-gray-100 flex items-center gap-2 min-w-[120px] lg:min-w-[160px] justify-between text-xs lg:text-sm flex-shrink-0"
                 >
                   <span className="text-gray-700 truncate">{selectedCategory}</span>
                   <ChevronDown className="w-4 h-4 text-gray-500" />
@@ -367,7 +362,7 @@ export default function Home() {
                   onChange={(e) => setSearchValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="What are you looking for..."
-                  className="flex-1 px-3 lg:px-4 py-2 lg:py-3 border border-gray-300 focus:outline-none text-gray-900 text-sm lg:text-base rounded-md sm:rounded-none min-w-0 w-full"
+                  className="flex-1 px-3 lg:px-4 py-2 lg:py-3 border-t border-b border-gray-300 focus:outline-none text-gray-900 text-sm lg:text-base min-w-0"
                   style={{ borderColor: '#e5e5e5' }}
                   onFocus={(e) => e.currentTarget.style.borderColor = '#FF6B00'}
                   onBlur={(e) => e.currentTarget.style.borderColor = '#e5e5e5'}
@@ -376,7 +371,7 @@ export default function Home() {
                 {/* Search Button */}
                 <button
                   onClick={handleSearch}
-                  className="px-4 lg:px-8 py-2 lg:py-3 text-white rounded-md sm:rounded-l-none sm:rounded-r-md transition-colors flex items-center gap-2 mt-2 sm:mt-0 w-full sm:w-auto justify-center sm:justify-start"
+                  className="px-4 lg:px-6 py-2 lg:py-3 text-white rounded-r-md transition-colors flex items-center gap-2 justify-center flex-shrink-0"
                   style={{ backgroundColor: '#FF6B00' }}
                   onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e55e00'}
                   onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#FF6B00'}
@@ -387,17 +382,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Actions */}
-            <div className="flex items-center gap-2 lg:gap-4">
-              <button className="flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-2 transition-colors" style={{ color: '#2D2C2C' }} onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#2D2C2C'}>
-                <ShoppingCart className="w-4 lg:w-5 h-4 lg:h-5" />
-                <span className="text-xs lg:text-sm font-medium hidden sm:inline">Cart</span>
-              </button>
-              <button className="flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-2 transition-colors" style={{ color: '#2D2C2C' }} onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#2D2C2C'}>
-                <User className="w-4 lg:w-5 h-4 lg:h-5" />
-                <span className="text-xs lg:text-sm font-medium hidden sm:inline">Sign In</span>
-              </button>
-            </div>
           </div>
         </div>
 
@@ -406,9 +390,6 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center gap-6 py-2 text-sm">
               <button className="transition-colors font-medium" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>All Categories</button>
-              <button className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Featured Selections</button>
-              <button className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Trade Assurance</button>
-              <button className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Buyer Protection</button>
               <button onClick={() => router.push('/help')} className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Help Center</button>
             </div>
           </div>
@@ -716,49 +697,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Trending Products */}
-        <div className="mb-8 lg:mb-12">
-          <div className="flex items-center justify-between mb-4 lg:mb-6">
-            <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>Trending This Week</h2>
-            <button
-              onClick={() => handleViewAll('trending')}
-              className="font-medium text-sm flex items-center gap-1 transition-colors"
-              style={{ color: '#FF6B00' }}
-              onMouseOver={(e) => e.currentTarget.style.color = '#e55e00'}
-              onMouseOut={(e) => e.currentTarget.style.color = '#FF6B00'}
-            >
-              View All
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 w-full">
-            {[
-              { name: 'Solar Panel 300W', price: '$85-$150', image: '☀️' },
-              { name: 'CNC Machine', price: '$8,500-$25,000', image: '🔩' },
-              { name: 'Air Compressor', price: '$450-$1,200', image: '💨' },
-              { name: 'Hydraulic Press', price: '$3,500-$12,000', image: '🏭' },
-              { name: 'Conveyor Belt', price: '$280-$850', image: '📦' },
-              { name: 'LED Display', price: '$120-$450', image: '📺' },
-            ].map((product, idx) => (
-              <div
-                key={idx}
-                className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-all cursor-pointer group"
-              >
-                <div className="bg-gray-50 h-24 lg:h-32 flex items-center justify-center text-3xl lg:text-5xl group-hover:bg-gray-100 transition-colors">
-                  {product.image}
-                </div>
-                <div className="p-2 lg:p-3">
-                  <h3 className="font-medium text-xs mb-1 line-clamp-2 transition-colors group-hover:text-[#FF6B00]" style={{ color: '#2D2C2C' }}>
-                    {product.name}
-                  </h3>
-                  <p className="font-bold text-xs lg:text-sm" style={{ color: '#FF6B00' }}>{product.price}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* Features Section */}
         <div className="mt-8 lg:mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 w-full">

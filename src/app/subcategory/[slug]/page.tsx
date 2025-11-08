@@ -304,7 +304,7 @@ export default function SubcategoryPage() {
                       <img 
                         src={product.imageUrl} 
                         alt={product.name}
-                        className="w-full h-full object-cover"
+                        className="max-w-full max-h-full object-contain"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                           const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
@@ -356,7 +356,7 @@ export default function SubcategoryPage() {
                         <img 
                           src={product.imageUrl} 
                           alt={product.name}
-                          className="w-full h-full object-cover rounded-lg"
+                          className="max-w-full max-h-full object-contain rounded-lg"
                           onError={(e) => {
                             e.currentTarget.style.display = 'none';
                             const nextElement = e.currentTarget.nextElementSibling as HTMLElement;

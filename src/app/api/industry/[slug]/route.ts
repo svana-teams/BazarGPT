@@ -56,15 +56,7 @@ export async function GET(
         include: {
           categories: {
             include: {
-              subcategories: {
-                include: {
-                  _count: {
-                    select: {
-                      products: true
-                    }
-                  }
-                }
-              }
+              subcategories: true
             }
           }
         }
@@ -90,15 +82,7 @@ export async function GET(
         include: {
           categories: {
             include: {
-              subcategories: {
-                include: {
-                  _count: {
-                    select: {
-                      products: true
-                    }
-                  }
-                }
-              }
+              subcategories: true
             }
           }
         }
@@ -127,7 +111,6 @@ export async function GET(
           id: subcategory.id,
           name: subcategory.name,
           url: subcategory.url,
-          productCount: subcategory._count.products,
         }))
       }))
     };
