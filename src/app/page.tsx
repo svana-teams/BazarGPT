@@ -28,7 +28,6 @@ interface Supplier {
 interface Industry {
   id: number;
   name: string;
-  productCount: number;
 }
 
 interface Product {
@@ -117,13 +116,11 @@ export default function Home() {
   const topCategories = industriesLoading 
     ? Array.from({ length: 8 }, (_, i) => ({
         name: 'Loading...',
-        icon: '⏳',
-        items: '...'
+        icon: '⏳'
       }))
     : industries.slice(0, 8).map(industry => ({
         name: industry.name,
-        icon: getIndustryIcon(industry.name),
-        items: `${industry.productCount > 0 ? industry.productCount + ' categories' : 'Available'}`
+        icon: getIndustryIcon(industry.name)
       }));
 
   const handleSearch = () => {
@@ -506,10 +503,9 @@ export default function Home() {
                 onClick={() => handleIndustryClick(category.name)}
               >
                 <div className="text-3xl lg:text-4xl mb-2 lg:mb-3">{category.icon}</div>
-                <h3 className="font-semibold mb-1 transition-colors group-hover:text-[#FF6B00] text-sm lg:text-base truncate" style={{ color: '#2D2C2C' }}>
+                <h3 className="font-semibold transition-colors group-hover:text-[#FF6B00] text-sm lg:text-base truncate" style={{ color: '#2D2C2C' }}>
                   {category.name}
                 </h3>
-                <p className="text-xs lg:text-sm text-gray-500">{category.items}</p>
               </div>
             ))}
           </div>
