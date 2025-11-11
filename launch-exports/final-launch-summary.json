@@ -1,0 +1,507 @@
+{
+  "exportInfo": {
+    "timestamp": "2025-11-11T04:54:23.715Z",
+    "structure": "3 categories × 3 subcategories × 3 products per sector",
+    "description": "Final BazarGPT launch structure"
+  },
+  "sectors": [
+    {
+      "sectorId": 11,
+      "sectorName": "Commercial Appliances",
+      "categoriesCount": 3,
+      "subcategoriesCount": 9,
+      "productsCount": 20,
+      "categories": [
+        {
+          "categoryName": "Aqua Culture, Aquarium & Supplies",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Aquaculture Tanks",
+              "productsCount": 2
+            },
+            {
+              "subcategoryName": "Aquarium Air Stone",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Aquarium Decoration",
+              "productsCount": 1
+            }
+          ]
+        },
+        {
+          "categoryName": "Artificial Plants",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Artificial Bamboo Plant",
+              "productsCount": 1
+            },
+            {
+              "subcategoryName": "Artificial Flower",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Artificial Rose",
+              "productsCount": 2
+            }
+          ]
+        },
+        {
+          "categoryName": "Cleaning Liquids & Wipes",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "AC Coil Cleaner",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Aerosol Disinfectant Spray",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Alkaline Soak Cleaner",
+              "productsCount": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectorId": 5,
+      "sectorName": "Electrical",
+      "categoriesCount": 3,
+      "subcategoriesCount": 9,
+      "productsCount": 27,
+      "categories": [
+        {
+          "categoryName": "Battery & Energy Storage",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Ac Charger",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "AC Remote Control",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Automotive Batteries",
+              "productsCount": 3
+            }
+          ]
+        },
+        {
+          "categoryName": "Electrical Cables & Wires",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Aerial Bunched Cable",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Aluminium Welding Cable",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Aluminum Cables",
+              "productsCount": 3
+            }
+          ]
+        },
+        {
+          "categoryName": "Electrical Conduits and Fittings",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Aluminium Cable Tray",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Cable Ducts",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Cable Management System",
+              "productsCount": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectorId": 2,
+      "sectorName": "Electronics",
+      "categoriesCount": 3,
+      "subcategoriesCount": 9,
+      "productsCount": 20,
+      "categories": [
+        {
+          "categoryName": "Biometric Systems",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Access Cards",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Access Control Systems",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Billing Machines",
+              "productsCount": 3
+            }
+          ]
+        },
+        {
+          "categoryName": "Commercial Electronics",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "5 Pin Socket",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Air Sterilizer",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Android TV Box",
+              "productsCount": 1
+            }
+          ]
+        },
+        {
+          "categoryName": "Computing Equipment",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Adapter Card",
+              "productsCount": 1
+            },
+            {
+              "subcategoryName": "Analog IO Card",
+              "productsCount": 2
+            },
+            {
+              "subcategoryName": "ATX Motherboard",
+              "productsCount": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectorId": 10,
+      "sectorName": "Furniture",
+      "categoriesCount": 3,
+      "subcategoriesCount": 8,
+      "productsCount": 19,
+      "categories": [
+        {
+          "categoryName": "Commercial Furniture",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Casting Iron Bench",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "FRP School Benches",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Modular Wooden Rooms",
+              "productsCount": 2
+            }
+          ]
+        },
+        {
+          "categoryName": "Decorative Items",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Abstract Art",
+              "productsCount": 1
+            },
+            {
+              "subcategoryName": "Acrylic Temple",
+              "productsCount": 1
+            },
+            {
+              "subcategoryName": "Advertising Danglers",
+              "productsCount": 3
+            }
+          ]
+        },
+        {
+          "categoryName": "Doors & Entryways",
+          "subcategoriesCount": 2,
+          "subcategories": [
+            {
+              "subcategoryName": "MS Door",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Wooden Flush Doors",
+              "productsCount": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectorId": 9,
+      "sectorName": "Industrial Products",
+      "categoriesCount": 3,
+      "subcategoriesCount": 9,
+      "productsCount": 22,
+      "categories": [
+        {
+          "categoryName": "Casters & Wheels",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Gate Caster",
+              "productsCount": 2
+            },
+            {
+              "subcategoryName": "Heavy Duty Casters",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Roller Wheel",
+              "productsCount": 3
+            }
+          ]
+        },
+        {
+          "categoryName": "Disinfection Equipment & Machines",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Aerosol Disinfector",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Fogging Machine",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Fumigation Machine",
+              "productsCount": 3
+            }
+          ]
+        },
+        {
+          "categoryName": "Flanges & Flanged Fittings",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "ALUMINUM FLANGE CAP GYM",
+              "productsCount": 1
+            },
+            {
+              "subcategoryName": "Cast Iron Flange",
+              "productsCount": 1
+            },
+            {
+              "subcategoryName": "HDPE Blind Flange",
+              "productsCount": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectorId": 13,
+      "sectorName": "Machinery",
+      "categoriesCount": 3,
+      "subcategoriesCount": 9,
+      "productsCount": 21,
+      "categories": [
+        {
+          "categoryName": "Agricultural Processing",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Amla Processing Machine",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Amla Processing Plant",
+              "productsCount": 1
+            },
+            {
+              "subcategoryName": "Blanching Machine",
+              "productsCount": 1
+            }
+          ]
+        },
+        {
+          "categoryName": "Air Compression Systems",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Air Booster",
+              "productsCount": 1
+            },
+            {
+              "subcategoryName": "Air Compressor Controller",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Air Compressor Head",
+              "productsCount": 3
+            }
+          ]
+        },
+        {
+          "categoryName": "Automated Filling",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Acid Filling Machine",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Aerosol Gas Filling Machines",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Ampoule Filling Machine",
+              "productsCount": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectorId": 8,
+      "sectorName": "Medical Equipment",
+      "categoriesCount": 3,
+      "subcategoriesCount": 9,
+      "productsCount": 19,
+      "categories": [
+        {
+          "categoryName": "Autoclave & Sterilizers",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Automatic Sanitizer Dispenser",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Cryogenic Freezers",
+              "productsCount": 2
+            },
+            {
+              "subcategoryName": "Dry Bath Incubator",
+              "productsCount": 3
+            }
+          ]
+        },
+        {
+          "categoryName": "Cleanroom Equipment",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Air Shower Service",
+              "productsCount": 1
+            },
+            {
+              "subcategoryName": "Aluminium Coving",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Bio Safety Cabinets",
+              "productsCount": 3
+            }
+          ]
+        },
+        {
+          "categoryName": "Diagnostic Equipment & Products",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Automatic Film Processor",
+              "productsCount": 1
+            },
+            {
+              "subcategoryName": "BPL X Ray Machine",
+              "productsCount": 2
+            },
+            {
+              "subcategoryName": "DEXA Bone Densitometer",
+              "productsCount": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectorId": 15,
+      "sectorName": "Refrigeration Equipment",
+      "categoriesCount": 3,
+      "subcategoriesCount": 7,
+      "productsCount": 20,
+      "categories": [
+        {
+          "categoryName": "Beverage Coolers",
+          "subcategoriesCount": 2,
+          "subcategories": [
+            {
+              "subcategoryName": "Beer & Beverage Coolers",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Beer Keg",
+              "productsCount": 3
+            }
+          ]
+        },
+        {
+          "categoryName": "Blast Freezer",
+          "subcategoriesCount": 3,
+          "subcategories": [
+            {
+              "subcategoryName": "Plate Freezers",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Portable Blast Freezer",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "Tunnel Freezer",
+              "productsCount": 3
+            }
+          ]
+        },
+        {
+          "categoryName": "Bottle Dispenser",
+          "subcategoriesCount": 2,
+          "subcategories": [
+            {
+              "subcategoryName": "Bottled Dispenser",
+              "productsCount": 3
+            },
+            {
+              "subcategoryName": "SS bottle Glass Dispenser",
+              "productsCount": 2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "sectors": 8,
+    "categories": 24,
+    "subcategories": 69,
+    "products": 168
+  }
+}

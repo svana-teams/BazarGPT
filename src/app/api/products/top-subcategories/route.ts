@@ -5,24 +5,49 @@ const prisma = new PrismaClient();
 
 export async function GET() {
   try {
-    // Get top 100 subcategories with the most products
+    console.log('Starting top subcategories API call...');
+    
+    // Get subcategories from our 8 launch sectors only, with better performance
     const topSubcategories = await prisma.subcategory.findMany({
+      where: {
+        category: {
+          sector: {
+            id: { in: [2, 5, 8, 9, 10, 11, 13, 15] } // Our 8 launch sectors
+          }
+        }
+      },
       include: {
         _count: {
           select: { products: true }
         },
         category: {
-          include: {
-            sector: true
+          select: {
+            name: true,
+            sector: {
+              select: {
+                name: true
+              }
+            }
           }
         },
         products: {
           take: 1, // Get just one representative product per subcategory
-          include: {
-            supplier: true
+          select: {
+            id: true,
+            name: true,
+            imageUrl: true,
+            price: true,
+            priceUnit: true,
+            brand: true,
+            supplier: {
+              select: {
+                name: true,
+                location: true
+              }
+            }
           },
           orderBy: {
-            createdAt: 'desc' // Get the most recent product
+            id: 'desc' // Get the most recent product by ID
           }
         }
       },
@@ -31,7 +56,7 @@ export async function GET() {
           _count: 'desc' // Order by product count descending
         }
       },
-      take: 100 // Take top 100 subcategories
+      take: 50 // Reduce to 50 for better performance
     });
 
     // Filter out subcategories that have no products and transform the data

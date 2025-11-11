@@ -3,15 +3,15 @@
 :root {
   /* Modern Marketplace Color Palette */
   --primary-blue: #0D1B2A;        /* Midnight Blue */
-  --secondary-orange: #FF6B00;     /* Saffron Orange */
+  --secondary-orange: #1f2937;     /* Dark Gray */
   --accent-cyan: #00C8FF;          /* Electric Cyan */
   --background: #FAF8F4;           /* Off White */
   --foreground: #2D2C2C;           /* Charcoal Gray */
 
   /* Additional shades */
   --primary-blue-light: #1a2f47;
-  --secondary-orange-dark: #e55e00;
-  --secondary-orange-light: #ff8533;
+  --secondary-orange-dark: #111827;
+  --secondary-orange-light: #374151;
 }
 
 @theme inline {
@@ -59,7 +59,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #FF6B00;
+  background: #1f2937;
 }
 
 /* Auto-resize textarea */
@@ -79,7 +79,7 @@ textarea {
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--secondary-orange);
+  outline: 2px solid #1f2937;
   outline-offset: 2px;
 }
 

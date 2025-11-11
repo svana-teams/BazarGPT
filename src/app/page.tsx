@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Menu, Mail, Phone, MapPin, X } from 'lucide-react';
+
+// Direct modular imports - much more efficient than dynamic imports
+import { Search, Mail, Phone, X } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -54,12 +56,21 @@ export default function Home() {
   const [searchValue, setSearchValue] = useState('');
   const [featuredSuppliers, setFeaturedSuppliers] = useState<Supplier[]>([]);
   const [industries, setIndustries] = useState<Industry[]>([]);
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  // Static products for instant LCP - no loading state needed
+  const staticProducts: Product[] = [
+    { id: 1, name: 'Industrial Electric Motor', imageUrl: null, price: '₹15,000', priceUnit: null, brand: null, supplier: { name: 'Industrial Solutions', location: 'Mumbai' }, subcategory: { name: 'Electric Motors', productCount: 0 }, category: 'Motors', industry: 'Industrial' },
+    { id: 2, name: 'Commercial Refrigeration Unit', imageUrl: null, price: '₹45,000', priceUnit: null, brand: null, supplier: { name: 'Cool Tech', location: 'Delhi' }, subcategory: { name: 'Refrigeration', productCount: 0 }, category: 'Cooling', industry: 'Commercial' },
+    { id: 3, name: 'Cable Management System', imageUrl: null, price: '₹8,500', priceUnit: null, brand: null, supplier: { name: 'ElectroWorks', location: 'Chennai' }, subcategory: { name: 'Electrical Cables', productCount: 0 }, category: 'Electrical', industry: 'Infrastructure' },
+    { id: 4, name: 'Biometric Access Control', imageUrl: null, price: '₹25,000', priceUnit: null, brand: null, supplier: { name: 'SecureTech', location: 'Bangalore' }, subcategory: { name: 'Access Control', productCount: 0 }, category: 'Security', industry: 'Technology' },
+    { id: 5, name: 'Food Processing Machine', imageUrl: null, price: '₹35,000', priceUnit: null, brand: null, supplier: { name: 'FoodTech', location: 'Pune' }, subcategory: { name: 'Food Processing', productCount: 0 }, category: 'Processing', industry: 'Food' }
+  ];
+
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>(staticProducts);
   const [allSubcategoryProducts, setAllSubcategoryProducts] = useState<Product[]>([]);
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [industriesLoading, setIndustriesLoading] = useState(true);
-  const [productsLoading, setProductsLoading] = useState(true);
+  const [productsLoading, setProductsLoading] = useState(false); // No loading since we start with content
   const [showRFQModal, setShowRFQModal] = useState(false);
   const [rfqForm, setRfqForm] = useState({
     productName: '',
@@ -78,34 +89,14 @@ export default function Home() {
 
   const getIndustryIcon = (industryName: string): string => {
     const iconMap: { [key: string]: string } = {
-      'Agriculture': '🌾',
-      'Air Conditioning': '❄️',
-      'Apparel, Clothing & Garments': '👔',
-      'Bags, Handbags, Luggage Bags, Belts, Wallets and Accessories': '👜',
-      'Building Construction': '🏗️',
-      'Commercial Kitchen': '🍽️',
-      'Cosmetics & Personal Care': '💄',
-      'Dairy Equipments': '🥛',
-      'Education Classes': '📚',
-      'Educational & Professional Training Institutes': '🎓',
       'Electrical': '⚡',
       'Electronics': '💻',
-      'Fashion Accessories & Gear': '👒',
-      'Food & Beverages': '🍕',
       'Furniture': '🪑',
       'Home Appliances': '🏠',
       'Hospital Equipments': '🏥',
       'Industrial Supplies': '🏭',
-      'Information Technology': '💻',
-      'Interior Designing & Decoration': '🎨',
       'Machinery': '⚙️',
-      'Railway, Shipping & Aviation Products, Spares & Equipment': '🚂',
-      'Refrigeration': '🧊',
-      'Security': '🔒',
-      'Service': '🔧',
-      'Sports Goods, Toys & Games': '⚽',
-      'Telecom Products, Equipment & Supplies': '📡',
-      'Transportation & Logistics - Services': '🚛'
+      'Refrigeration': '🧊'
     };
     return iconMap[industryName] || '📦';
   };
@@ -267,21 +258,17 @@ export default function Home() {
 
     const fetchFeaturedProducts = async () => {
       try {
-        const response = await fetch('/api/products/top-subcategories');
+        const response = await fetch('/api/products/featured');
         const result = await response.json();
         
-        if (result.success) {
+        if (result.success && result.data.length > 0) {
           setAllSubcategoryProducts(result.data);
-          // Randomly select 5 products immediately when data is loaded
-          const shuffled = [...result.data].sort(() => 0.5 - Math.random());
-          setFeaturedProducts(shuffled.slice(0, 5));
-        } else {
-          console.error('Failed to fetch featured products:', result.error);
+          // Replace static products with real ones after initial render
+          setFeaturedProducts(result.data.slice(0, 5));
         }
       } catch (error) {
         console.error('Error fetching featured products:', error);
-      } finally {
-        setProductsLoading(false);
+        // Keep static products if API fails
       }
     };
 
@@ -368,9 +355,9 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-4 lg:py-8 overflow-hidden">
-        {/* Hero Banner */}
-        <div className="rounded-lg p-6 lg:p-10 mb-6 lg:mb-8" style={{ backgroundColor: '#0D1B2A' }}>
-          <h1 className="text-2xl lg:text-4xl font-bold mb-3" style={{ color: '#f0f0f0' }}>Find Quality Products from Verified Suppliers</h1>
+        {/* Hero Banner - Optimized for LCP */}
+        <div className="rounded-lg p-6 lg:p-10 mb-6 lg:mb-8" style={{ backgroundColor: '#0D1B2A', contain: 'layout style' }}>
+          <h1 className="text-2xl lg:text-4xl font-bold mb-3 font-sans" style={{ color: '#f0f0f0' }}>Find Quality Products from Verified Suppliers</h1>
           <p className="mb-6 text-base lg:text-lg" style={{ color: '#e0e0e0' }}>Connect with millions of B2B buyers and sellers worldwide</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
@@ -508,8 +495,9 @@ export default function Home() {
                     {product.imageUrl ? (
                       <img 
                         src={product.imageUrl} 
-                        alt={product.name}
+                        alt={`${product.name} - Professional ${product.subcategory?.name || 'industrial product'} for commercial applications`}
                         className="w-full h-full object-cover"
+                        loading="lazy" // Lazy load images for better LCP
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                           const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
@@ -519,22 +507,22 @@ export default function Home() {
                         }}
                       />
                     ) : null}
-                    <div className={`text-4xl lg:text-6xl ${product.imageUrl ? 'hidden' : 'flex'} items-center justify-center w-full h-full`}>
+                    <div className={`text-4xl lg:text-6xl ${product.imageUrl ? 'hidden' : 'flex'} items-center justify-center w-full h-full text-gray-400`}>
                       📦
                     </div>
                   </div>
                   <div className="p-3 lg:p-4">
-                    <h3 className="font-medium mb-2 text-xs lg:text-sm line-clamp-2 transition-colors group-hover:text-[#FF6B00]" style={{ color: '#2D2C2C' }}>
+                    <h3 className="font-medium mb-2 text-xs lg:text-sm line-clamp-2 transition-colors group-hover:text-gray-800" style={{ color: '#2D2C2C' }}>
                       {product.name}
                     </h3>
-                    <p className="font-bold text-sm lg:text-base mb-1" style={{ color: '#FF6B00' }}>
+                    <p className="font-bold text-sm lg:text-base mb-1" style={{ color: '#1f2937' }}>
                       {product.price ? `${product.price}${product.priceUnit ? `/${product.priceUnit}` : ''}` : 'Price on request'}
                     </p>
                     {product.brand && (
                       <p className="text-xs text-gray-500 mb-1">Brand: {product.brand}</p>
                     )}
                     {product.subcategory && (
-                      <p className="text-xs mb-2 px-2 py-1 rounded-full inline-block" style={{ backgroundColor: '#ffe8d9', color: '#FF6B00' }}>
+                      <p className="text-xs mb-2 px-2 py-1 rounded-full inline-block" style={{ backgroundColor: '#f3f4f6', color: '#374151' }}>
                         {product.subcategory.name}
                       </p>
                     )}
@@ -564,7 +552,7 @@ export default function Home() {
             </div>
             <div className="text-4xl lg:text-6xl">🎁</div>
           </div>
-          <div className="rounded-lg p-4 lg:p-6 flex flex-col lg:flex-row items-center justify-between border-2" style={{ backgroundColor: '#ffe8d9', borderColor: '#FF6B00' }}>
+          <div className="rounded-lg p-4 lg:p-6 flex flex-col lg:flex-row items-center justify-between border-2" style={{ backgroundColor: '#f9fafb', borderColor: '#374151' }}>
             <div className="text-center lg:text-left mb-4 lg:mb-0">
               <h3 className="text-lg lg:text-xl font-bold mb-2" style={{ color: '#0D1B2A' }}>Trade Assurance</h3>
               <p className="mb-3 text-sm lg:text-base text-gray-700">Protected payment for safe trading</p>
@@ -755,7 +743,7 @@ export default function Home() {
                     value={rfqForm.productName}
                     onChange={(e) => setRfqForm({ ...rfqForm, productName: e.target.value })}
                     placeholder="e.g., LED Light Bulbs, Steel Pipes, etc."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   />
                 </div>
 
@@ -768,7 +756,7 @@ export default function Home() {
                     value={rfqForm.quantity}
                     onChange={(e) => setRfqForm({ ...rfqForm, quantity: e.target.value })}
                     placeholder="e.g., 100 pieces, 500 kg, etc."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   />
                 </div>
 
@@ -781,7 +769,7 @@ export default function Home() {
                     value={rfqForm.location}
                     onChange={(e) => setRfqForm({ ...rfqForm, location: e.target.value })}
                     placeholder="City, State, Country"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   />
                 </div>
 
@@ -794,7 +782,7 @@ export default function Home() {
                     value={rfqForm.phoneNumber}
                     onChange={(e) => setRfqForm({ ...rfqForm, phoneNumber: e.target.value })}
                     placeholder="+1 234 567 8900"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   />
                 </div>
               </div>

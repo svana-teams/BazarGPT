@@ -57,7 +57,11 @@ export async function GET(
           categories: {
             include: {
               subcategories: true
-            }
+            },
+            orderBy: {
+              name: 'asc'
+            },
+            take: 3
           }
         }
       });
@@ -83,7 +87,11 @@ export async function GET(
           categories: {
             include: {
               subcategories: true
-            }
+            },
+            orderBy: {
+              name: 'asc'
+            },
+            take: 3
           }
         }
       });

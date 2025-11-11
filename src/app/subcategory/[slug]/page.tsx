@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft, Filter, Grid, List, X } from 'lucide-react';
+import { ArrowLeft, Grid, List, X } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -207,7 +207,7 @@ export default function SubcategoryPage() {
             <div className="flex flex-wrap items-center gap-1 sm:hidden">
               <button 
                 onClick={() => router.push('/')}
-                className="hover:text-orange-600 transition-colors cursor-pointer"
+                className="hover:text-gray-800 transition-colors cursor-pointer"
               >
                 Home
               </button>
@@ -219,7 +219,7 @@ export default function SubcategoryPage() {
             <div className="hidden sm:flex sm:flex-wrap sm:items-center sm:gap-2">
               <button 
                 onClick={() => router.push('/')}
-                className="hover:text-orange-600 transition-colors cursor-pointer"
+                className="hover:text-gray-800 transition-colors cursor-pointer"
               >
                 Home
               </button>
@@ -235,7 +235,7 @@ export default function SubcategoryPage() {
                     .replace(/^-|-$/g, '');
                   router.push(`/industry/${sectorSlug}`);
                 }}
-                className="hover:text-orange-600 transition-colors cursor-pointer"
+                className="hover:text-gray-800 transition-colors cursor-pointer"
               >
                 {subcategoryData.category.sector.name}
               </button>
@@ -251,7 +251,7 @@ export default function SubcategoryPage() {
                     .replace(/^-|-$/g, '');
                   router.push(`/industry/${sectorSlug}`);
                 }}
-                className="hover:text-orange-600 transition-colors cursor-pointer"
+                className="hover:text-gray-800 transition-colors cursor-pointer"
               >
                 {subcategoryData.category.name}
               </button>
@@ -264,38 +264,30 @@ export default function SubcategoryPage() {
             {subcategoryData.name}
           </h1>
           <p className="text-sm sm:text-base text-gray-600">
-            {subcategoryData.totalProducts} products available
+            Featured products in this category
           </p>
         </div>
 
         {/* Main Content Area */}
-        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
-          {/* Left Sidebar - Filter Space - Hidden on mobile */}
-          <div className="hidden lg:block lg:w-64 lg:flex-shrink-0">
-            <div className="bg-white rounded-lg border border-gray-200 p-4">
-              <h3 className="font-medium text-gray-800 mb-4">Filters</h3>
-              <p className="text-sm text-gray-500">Filter options will be available here</p>
-            </div>
-          </div>
-
-          {/* Right Content Area */}
-          <div className="flex-1 min-w-0">
+        <div>
+          {/* Content Area */}
+          <div className="w-full">
             {/* View Toggle */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div className="text-sm text-gray-600">
-                Showing {subcategoryData.products.length} of {subcategoryData.totalProducts} products
+                {subcategoryData.products.length} featured products
               </div>
               
               <div className="flex items-center gap-2 self-end sm:self-auto">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-orange-100 text-orange-600' : 'text-gray-600 hover:bg-gray-100'}`}
+                  className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-gray-200 text-gray-800' : 'text-gray-600 hover:bg-gray-100'}`}
                 >
                   <Grid className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-orange-100 text-orange-600' : 'text-gray-600 hover:bg-gray-100'}`}
+                  className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-gray-200 text-gray-800' : 'text-gray-600 hover:bg-gray-100'}`}
                 >
                   <List className="w-4 h-4" />
                 </button>
@@ -305,8 +297,8 @@ export default function SubcategoryPage() {
             {/* Products Grid */}
             {subcategoryData.products.length > 0 ? (
               <div className={viewMode === 'grid' 
-                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6" 
-                : "space-y-4"
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto" 
+                : "space-y-4 max-w-4xl mx-auto"
               }>
             {subcategoryData.products.map((product) => (
               viewMode === 'grid' ? (
@@ -334,10 +326,10 @@ export default function SubcategoryPage() {
                     </div>
                   </div>
                   <div className="p-3 sm:p-4">
-                    <h3 className="font-medium mb-2 text-xs sm:text-sm line-clamp-2 transition-colors group-hover:text-[#FF6B00]" style={{ color: '#2D2C2C' }}>
+                    <h3 className="font-medium mb-2 text-xs sm:text-sm line-clamp-2 transition-colors group-hover:text-gray-800" style={{ color: '#2D2C2C' }}>
                       {product.name}
                     </h3>
-                    <p className="font-bold text-sm sm:text-base mb-2" style={{ color: '#FF6B00' }}>
+                    <p className="font-bold text-sm sm:text-base mb-2" style={{ color: '#1f2937' }}>
                       {product.price ? `${product.price}${product.priceUnit ? `/${product.priceUnit}` : ''}` : 'Price on request'}
                     </p>
                     {product.brand && (
@@ -347,9 +339,9 @@ export default function SubcategoryPage() {
                     <p className="text-xs text-gray-500 truncate mb-3">{product.supplier.location}</p>
                     <button
                       className="w-full py-2 border rounded-md transition-colors text-xs sm:text-sm font-medium"
-                      style={{ borderColor: '#FF6B00', color: '#FF6B00' }}
+                      style={{ borderColor: '#374151', color: '#374151' }}
                       onMouseOver={(e) => {
-                        e.currentTarget.style.backgroundColor = '#ffe8d9';
+                        e.currentTarget.style.backgroundColor = '#f3f4f6';
                       }}
                       onMouseOut={(e) => {
                         e.currentTarget.style.backgroundColor = 'transparent';
@@ -370,7 +362,7 @@ export default function SubcategoryPage() {
                       {product.imageUrl ? (
                         <img 
                           src={product.imageUrl} 
-                          alt={product.name}
+                          alt={`${product.name} - Professional product from ${product.supplier.name} for commercial applications`}
                           className="max-w-full max-h-full object-contain rounded-lg"
                           onError={(e) => {
                             e.currentTarget.style.display = 'none';
@@ -390,7 +382,7 @@ export default function SubcategoryPage() {
                       <h3 className="font-medium mb-1 text-sm sm:text-base text-gray-800 line-clamp-2">
                         {product.name}
                       </h3>
-                      <p className="font-bold text-base sm:text-lg mb-2" style={{ color: '#FF6B00' }}>
+                      <p className="font-bold text-base sm:text-lg mb-2" style={{ color: '#1f2937' }}>
                         {product.price ? `${product.price}${product.priceUnit ? `/${product.priceUnit}` : ''}` : 'Price on request'}
                       </p>
                       <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-gray-600 mb-3">
@@ -403,9 +395,9 @@ export default function SubcategoryPage() {
                     <div className="flex-shrink-0 w-full sm:w-auto">
                       <button
                         className="w-full sm:w-auto px-4 sm:px-6 py-2 border rounded-md transition-colors text-xs sm:text-sm font-medium"
-                        style={{ borderColor: '#FF6B00', color: '#FF6B00' }}
+                        style={{ borderColor: '#374151', color: '#374151' }}
                         onMouseOver={(e) => {
-                          e.currentTarget.style.backgroundColor = '#ffe8d9';
+                          e.currentTarget.style.backgroundColor = '#f3f4f6';
                         }}
                         onMouseOut={(e) => {
                           e.currentTarget.style.backgroundColor = 'transparent';
@@ -452,7 +444,7 @@ export default function SubcategoryPage() {
                 <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                   <h3 className="font-medium text-gray-800 mb-2">Product Details</h3>
                   <p className="text-sm text-gray-600 mb-1">{selectedProduct.name}</p>
-                  <p className="text-sm font-semibold" style={{ color: '#FF6B00' }}>
+                  <p className="text-sm font-semibold" style={{ color: '#1f2937' }}>
                     {selectedProduct.price ? `${selectedProduct.price}${selectedProduct.priceUnit ? `/${selectedProduct.priceUnit}` : ''}` : 'Price on request'}
                   </p>
                   <p className="text-xs text-gray-500 mt-2">
@@ -478,7 +470,7 @@ export default function SubcategoryPage() {
                       value={contactForm.quantity}
                       onChange={(e) => setContactForm({ ...contactForm, quantity: e.target.value })}
                       placeholder="e.g., 100 pieces, 500 kg, etc."
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                     />
                   </div>
 
@@ -491,7 +483,7 @@ export default function SubcategoryPage() {
                       value={contactForm.location}
                       onChange={(e) => setContactForm({ ...contactForm, location: e.target.value })}
                       placeholder="City, State, Country"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                     />
                   </div>
 
@@ -504,7 +496,7 @@ export default function SubcategoryPage() {
                       value={contactForm.phoneNumber}
                       onChange={(e) => setContactForm({ ...contactForm, phoneNumber: e.target.value })}
                       placeholder="+1 234 567 8900"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -521,7 +513,7 @@ export default function SubcategoryPage() {
                     onClick={handleSubmitContact}
                     disabled={isSubmitting}
                     className="flex-1 px-4 py-2 rounded-md text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{ backgroundColor: isSubmitting ? '#ccc' : '#FF6B00' }}
+                    style={{ backgroundColor: isSubmitting ? '#ccc' : '#1f2937' }}
                     onMouseOver={(e) => {
                       if (!isSubmitting) {
                         e.currentTarget.style.backgroundColor = '#e55e00';
@@ -529,7 +521,7 @@ export default function SubcategoryPage() {
                     }}
                     onMouseOut={(e) => {
                       if (!isSubmitting) {
-                        e.currentTarget.style.backgroundColor = '#FF6B00';
+                        e.currentTarget.style.backgroundColor = '#1f2937';
                       }
                     }}
                   >

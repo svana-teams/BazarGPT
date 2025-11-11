@@ -5,42 +5,58 @@ const prisma = new PrismaClient();
 
 export async function GET() {
   try {
+    // Optimized query - only get essential fields, no deep includes
     const products = await prisma.product.findMany({
-      take: 10, // Get top 10 products
-      include: {
-        subcategory: {
-          include: {
-            category: {
-              include: {
-                sector: true
-              }
-            }
+      take: 5, // Reduce to only 5 for faster loading
+      select: {
+        id: true,
+        name: true,
+        imageUrl: true,
+        price: true,
+        priceUnit: true,
+        brand: true,
+        supplier: {
+          select: {
+            name: true,
+            location: true
           }
         },
-        supplier: true
-      },
-      orderBy: [
-        {
-          createdAt: 'desc' // Most recent products first, you can change this logic
+        subcategory: {
+          select: {
+            name: true
+          }
         }
-      ]
+      },
+      where: {
+        // Only get products from our 8 launch sectors for faster query
+        subcategory: {
+          category: {
+            sector: {
+              id: { in: [2, 5, 8, 9, 10, 11, 13, 15] }
+            }
+          }
+        }
+      },
+      orderBy: {
+        id: 'desc' // Faster than createdAt
+      }
     });
 
-    // Transform the data for frontend
-    const featuredProducts = products.map((product: any) => ({
+    // Minimal transformation for speed
+    const featuredProducts = products.map(product => ({
       id: product.id,
       name: product.name,
       imageUrl: product.imageUrl,
       price: product.price,
       priceUnit: product.priceUnit,
       brand: product.brand,
-      specifications: product.specifications,
       supplier: {
         name: product.supplier?.name || 'Unknown Supplier',
         location: product.supplier?.location || 'Unknown Location'
       },
-      category: product.subcategory?.category?.name || 'Unknown Category',
-      industry: product.subcategory?.category?.sector?.name || 'Unknown Industry'
+      subcategory: {
+        name: product.subcategory?.name || 'Unknown Category'
+      }
     }));
 
     return NextResponse.json({

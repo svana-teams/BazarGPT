@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, ChevronRight, X } from 'lucide-react';
+import { ArrowLeft, ChevronRight } from 'lucide-react';
 
 interface Subcategory {
   id: number;
@@ -29,15 +29,6 @@ export default function IndustryPage() {
   const [industryData, setIndustryData] = useState<IndustryData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [modalCategory, setModalCategory] = useState<Category | null>(null);
-
-  const handleOpenModal = (category: Category) => {
-    setModalCategory(category);
-  };
-
-  const handleCloseModal = () => {
-    setModalCategory(null);
-  };
 
   const handleSubcategoryClick = (subcategory: Subcategory) => {
     // Create URL-friendly slug from subcategory name
@@ -129,7 +120,7 @@ export default function IndustryPage() {
           <div className="text-sm text-gray-500 mb-3">
             <button 
               onClick={() => router.push('/')}
-              className="hover:text-orange-600 transition-colors cursor-pointer"
+              className="hover:text-gray-800 transition-colors cursor-pointer"
             >
               Home
             </button>
@@ -155,33 +146,18 @@ export default function IndustryPage() {
               </h3>
               
               <div className="space-y-1">
-                {category.subcategories.slice(0, 5).map((subcategory) => (
+                {category.subcategories.slice(0, 3).map((subcategory) => (
                   <div
                     key={subcategory.id}
                     className="flex items-center justify-between py-1.5 px-2 rounded hover:bg-gray-50 cursor-pointer group transition-colors"
                     onClick={() => handleSubcategoryClick(subcategory)}
                   >
-                    <span className="text-sm text-gray-700 group-hover:text-orange-600 transition-colors">
+                    <span className="text-sm text-gray-700 group-hover:text-gray-800 transition-colors">
                       {subcategory.name}
                     </span>
-                    <ChevronRight className="w-3 h-3 text-gray-400 group-hover:text-orange-600 transition-colors" />
+                    <ChevronRight className="w-3 h-3 text-gray-400 group-hover:text-gray-800 transition-colors" />
                   </div>
                 ))}
-                
-                {category.subcategories.length > 5 && (
-                  <div className="pt-2 mt-2 border-t border-gray-100">
-                    <button 
-                      onClick={() => handleOpenModal(category)}
-                      className="text-sm font-medium flex items-center gap-1 transition-colors"
-                      style={{ color: '#FF6B00' }}
-                      onMouseOver={(e) => e.currentTarget.style.color = '#e55e00'}
-                      onMouseOut={(e) => e.currentTarget.style.color = '#FF6B00'}
-                    >
-                      View {category.subcategories.length - 5} more
-                      <ChevronRight className="w-3 h-3" />
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
           ))}
@@ -195,46 +171,6 @@ export default function IndustryPage() {
         )}
       </div>
 
-      {/* Subcategories Modal */}
-      {modalCategory && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[80vh] overflow-hidden">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 className="text-xl font-semibold" style={{ color: '#2D2C2C' }}>
-                {modalCategory.name}
-              </h2>
-              <button
-                onClick={handleCloseModal}
-                className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <X className="w-5 h-5 text-gray-500" />
-              </button>
-            </div>
-
-            {/* Modal Content */}
-            <div className="p-6 overflow-y-auto max-h-[60vh]">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {modalCategory.subcategories.map((subcategory) => (
-                  <div
-                    key={subcategory.id}
-                    className="flex items-center justify-between py-2 px-3 rounded hover:bg-gray-50 cursor-pointer group transition-colors border border-gray-100"
-                    onClick={() => {
-                      handleSubcategoryClick(subcategory);
-                      handleCloseModal();
-                    }}
-                  >
-                    <span className="text-sm text-gray-700 group-hover:text-orange-600 transition-colors">
-                      {subcategory.name}
-                    </span>
-                    <ChevronRight className="w-3 h-3 text-gray-400 group-hover:text-orange-600 transition-colors" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

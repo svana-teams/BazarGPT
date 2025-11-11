@@ -1,0 +1,78 @@
+{
+  "exportInfo": {
+    "timestamp": "2025-11-11T04:33:46.621Z",
+    "description": "Summary of launch content by sector"
+  },
+  "sectors": [
+    {
+      "sectorId": 5,
+      "sectorName": "Electrical",
+      "categoriesCount": 14,
+      "subcategoriesCount": 70,
+      "productsCount": 178,
+      "sectorUrl": "/industry/electrical"
+    },
+    {
+      "sectorId": 2,
+      "sectorName": "Electronics",
+      "categoriesCount": 21,
+      "subcategoriesCount": 104,
+      "productsCount": 260,
+      "sectorUrl": "/industry/electronics"
+    },
+    {
+      "sectorId": 10,
+      "sectorName": "Furniture",
+      "categoriesCount": 30,
+      "subcategoriesCount": 122,
+      "productsCount": 295,
+      "sectorUrl": "/industry/furniture"
+    },
+    {
+      "sectorId": 11,
+      "sectorName": "Home Appliances",
+      "categoriesCount": 23,
+      "subcategoriesCount": 101,
+      "productsCount": 237,
+      "sectorUrl": "/industry/homeappliances"
+    },
+    {
+      "sectorId": 8,
+      "sectorName": "Hospital Equipments",
+      "categoriesCount": 15,
+      "subcategoriesCount": 67,
+      "productsCount": 163,
+      "sectorUrl": "/industry/hospitalequipments"
+    },
+    {
+      "sectorId": 9,
+      "sectorName": "Industrial Supplies",
+      "categoriesCount": 15,
+      "subcategoriesCount": 73,
+      "productsCount": 181,
+      "sectorUrl": "/industry/industrialsupplies"
+    },
+    {
+      "sectorId": 13,
+      "sectorName": "Machinery",
+      "categoriesCount": 79,
+      "subcategoriesCount": 375,
+      "productsCount": 1019,
+      "sectorUrl": "/industry/machinery"
+    },
+    {
+      "sectorId": 15,
+      "sectorName": "Refrigeration",
+      "categoriesCount": 13,
+      "subcategoriesCount": 48,
+      "productsCount": 140,
+      "sectorUrl": "/industry/refrigeration"
+    }
+  ],
+  "totals": {
+    "sectors": 8,
+    "categories": 210,
+    "subcategories": 960,
+    "products": 2473
+  }
+}

@@ -59,8 +59,8 @@ model Supplier {
   createdAt DateTime               @default(now())
   updatedAt DateTime               @updatedAt
   embedding Unsupported("vector")?
-  products  Product[]
   enquiries Enquiry[]
+  products  Product[]
 
   @@unique([gst, mobile])
   @@index([name])
@@ -82,9 +82,9 @@ model Product {
   createdAt        DateTime               @default(now())
   updatedAt        DateTime               @updatedAt
   embedding        Unsupported("vector")?
+  enquiries        Enquiry[]
   subcategory      Subcategory            @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
   supplier         Supplier               @relation(fields: [supplierId], references: [id], onDelete: Cascade)
-  enquiries        Enquiry[]
 
   @@index([subcategoryId])
   @@index([supplierId])
