@@ -86,6 +86,8 @@ export default function Home() {
   });
   const [rfqValidationError, setRfqValidationError] = useState('');
   const [isRfqSubmitting, setIsRfqSubmitting] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
 
   const popularSearches = [
@@ -152,10 +154,10 @@ export default function Home() {
           price: result.price,
           priceUnit: null,
           brand: result.brand,
-          supplier: { name: 'Search Result', location: 'Various' },
-          subcategory: { name: 'Search', productCount: 0 },
-          category: 'Search Results',
-          industry: 'Various'
+          supplier: { name: 'Verified Supplier', location: 'India' },
+          subcategory: { name: 'Industrial', productCount: 0 },
+          category: 'Industrial Products',
+          industry: 'Manufacturing'
         }));
         
         console.log('Popular search results:', transformedResults);
@@ -193,10 +195,10 @@ export default function Home() {
             price: result.price,
             priceUnit: null,
             brand: result.brand,
-            supplier: { name: 'Search Result', location: 'Various' },
-            subcategory: { name: 'Search', productCount: 0 },
-            category: 'Search Results',
-            industry: 'Various'
+            supplier: { name: 'Verified Supplier', location: 'India' },
+            subcategory: { name: 'Industrial', productCount: 0 },
+            category: 'Industrial Products',
+            industry: 'Manufacturing'
           }));
           
           console.log('🔍 Transformed results count:', transformedResults.length);
@@ -252,6 +254,11 @@ export default function Home() {
 
   const handleRFQOpen = () => {
     setShowRFQModal(true);
+  };
+
+  const handleContactSupplier = (product: Product) => {
+    setSelectedProduct(product);
+    setShowContactModal(true);
   };
 
   const handleRFQClose = () => {
@@ -487,7 +494,7 @@ export default function Home() {
             {/* Hero Banner - Optimized for LCP */}
             <div className="rounded-lg p-6 lg:p-10 mb-6 lg:mb-8" style={{ backgroundColor: '#0D1B2A', contain: 'layout style' }}>
           <h1 className="text-2xl lg:text-4xl font-bold mb-3 font-sans" style={{ color: '#f0f0f0' }}>Find Quality Products from Verified Suppliers</h1>
-          <p className="mb-6 text-base lg:text-lg" style={{ color: '#e0e0e0' }}>Discover 165,000+ industrial products, machinery, and equipment from verified suppliers across India. Get instant quotes and connect with trusted manufacturers.</p>
+          <p className="mb-6 text-base lg:text-lg" style={{ color: '#e0e0e0' }}>Discover thousands of industrial products, machinery, and equipment from verified suppliers across India. Get instant quotes and connect with trusted manufacturers.</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleRFQOpen}
@@ -632,13 +639,13 @@ export default function Home() {
               })().map((product, index) => (
                 <div
                   key={`${product.id}-${currentProductIndex}`}
-                  className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all cursor-pointer group animate-fadeIn"
+                  className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all group animate-fadeIn"
                   style={{
                     animationDelay: `${index * 100}ms`
                   }}
                   title={product.modifiedDescription || `${product.modifiedName || product.name} - ${product.supplier.name}`}
                 >
-                  <div className="bg-gray-100 h-32 lg:h-40 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                  <div className="bg-gray-100 h-48 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
                     {product.imageUrl ? (
                       <img 
                         src={product.imageUrl} 
@@ -658,23 +665,33 @@ export default function Home() {
                       📦
                     </div>
                   </div>
-                  <div className="p-3 lg:p-4">
-                    <h3 className="font-medium mb-2 text-xs lg:text-sm line-clamp-2 transition-colors group-hover:text-gray-800" style={{ color: '#2D2C2C' }}>
+                  <div className="p-4">
+                    <h3 className="font-medium mb-2 text-base line-clamp-2 transition-colors group-hover:text-gray-800" style={{ color: '#2D2C2C' }}>
                       {product.modifiedName || product.name}
                     </h3>
-                    <p className="font-bold text-sm lg:text-base mb-1" style={{ color: '#1f2937' }}>
+                    <p className="font-bold text-lg mb-2" style={{ color: '#1f2937' }}>
                       {product.price ? `${product.price}${product.priceUnit ? `/${product.priceUnit}` : ''}` : 'Price on request'}
                     </p>
                     {product.brand && (
-                      <p className="text-xs text-gray-500 mb-1">Brand: {product.brand}</p>
+                      <p className="text-sm text-gray-600 mb-1">Brand: {product.brand}</p>
                     )}
-                    {product.subcategory && (
-                      <p className="text-xs mb-2 px-2 py-1 rounded-full inline-block" style={{ backgroundColor: '#f3f4f6', color: '#374151' }}>
-                        {product.subcategory.name}
-                      </p>
-                    )}
-                    <p className="text-xs text-gray-600 truncate">Supplier: {product.supplier.name}</p>
-                    <p className="text-xs text-gray-500 truncate">Location: {product.supplier.location}</p>
+                    
+                    {/* Supplier Information */}
+                    <div className="mt-3 mb-4">
+                      <p className="text-sm font-medium text-gray-800">{product.supplier.name}</p>
+                      <p className="text-sm text-gray-500">{product.supplier.location}</p>
+                    </div>
+                    
+                    {/* Contact Supplier Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleContactSupplier(product);
+                      }}
+                      className="w-full py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-colors"
+                    >
+                      Contact supplier
+                    </button>
                   </div>
                 </div>
               ))
@@ -936,6 +953,108 @@ export default function Home() {
                   aria-label="Submit request for quotation to suppliers"
                 >
                   {isRfqSubmitting ? 'Sending...' : 'Submit Request'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Contact Supplier Modal */}
+      {showContactModal && selectedProduct && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold" style={{ color: '#2D2C2C' }}>
+                Contact Supplier
+              </h2>
+              <button
+                onClick={() => setShowContactModal(false)}
+                className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Close contact supplier modal"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6">
+              {/* Product Details Section */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Product Details
+                </label>
+                <div className="w-full p-3 bg-gray-50 border border-gray-300 rounded-md text-gray-900">
+                  <div className="font-medium">{selectedProduct.modifiedName || selectedProduct.name}</div>
+                  <div className="text-sm text-gray-600 mt-1">
+                    {selectedProduct.price && `Price: ${selectedProduct.price}`}
+                    {selectedProduct.brand && ` • Brand: ${selectedProduct.brand}`}
+                  </div>
+                  <div className="text-sm text-gray-500 mt-1">
+                    Supplier: {selectedProduct.supplier.name} • {selectedProduct.supplier.location}
+                  </div>
+                </div>
+              </div>
+
+              {/* Contact Form */}
+              <div className="space-y-4 mt-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Quantity Required
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., 100 pieces, 500 kg, etc."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Your Location
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="City, State, Country"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    placeholder="+1 234 567 8900"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              {/* Modal Actions */}
+              <div className="flex gap-3 mt-6 pt-4 border-t border-gray-200">
+                <button
+                  onClick={() => setShowContactModal(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                  aria-label="Cancel and close contact form"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    // Handle form submission here
+                    alert('Contact request sent successfully!');
+                    setShowContactModal(false);
+                  }}
+                  className="flex-1 px-4 py-2 rounded-md text-white font-medium transition-colors"
+                  style={{ backgroundColor: '#FF6B00' }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e55e00'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#FF6B00'}
+                  aria-label="Send contact request to supplier"
+                >
+                  Send Request
                 </button>
               </div>
             </div>
