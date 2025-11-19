@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Important pages
+Allow: /industry/*
+Allow: /subcategory/*
+Allow: /help
+
+# Block admin/internal pages (if any)
+Disallow: /api/
+Disallow: /*.json$
+
+# Sitemap location
+Sitemap: https://bazargpt.com/sitemap.xml
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1

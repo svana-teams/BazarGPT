@@ -464,6 +464,17 @@ export default function Home() {
         </div>
       </header>
 
+      {/* Breadcrumb Navigation */}
+      <nav className="max-w-7xl mx-auto px-4 py-2 text-sm text-gray-600" aria-label="Breadcrumb">
+        <ol className="flex items-center space-x-2">
+          <li>
+            <a href="/" className="hover:text-[#FF6B00] transition-colors">Home</a>
+          </li>
+          <li className="text-gray-400">/</li>
+          <li className="text-gray-900 font-medium">B2B Marketplace</li>
+        </ol>
+      </nav>
+
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-4 lg:py-8 overflow-hidden">
         {!searchValue.trim() && (
@@ -471,7 +482,7 @@ export default function Home() {
             {/* Hero Banner - Optimized for LCP */}
             <div className="rounded-lg p-6 lg:p-10 mb-6 lg:mb-8" style={{ backgroundColor: '#0D1B2A', contain: 'layout style' }}>
           <h1 className="text-2xl lg:text-4xl font-bold mb-3 font-sans" style={{ color: '#f0f0f0' }}>Find Quality Products from Verified Suppliers</h1>
-          <p className="mb-6 text-base lg:text-lg" style={{ color: '#e0e0e0' }}>Connect with millions of B2B buyers and sellers worldwide</p>
+          <p className="mb-6 text-base lg:text-lg" style={{ color: '#e0e0e0' }}>Discover 165,000+ industrial products, machinery, and equipment from verified suppliers across India. Get instant quotes and connect with trusted manufacturers.</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleRFQOpen}
@@ -536,21 +547,33 @@ export default function Home() {
                 <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>Browse by Industry</h2>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 w-full">
-                {topCategories.map((category, index) => (
-                  <div
-                    key={industriesLoading ? `loading-${index}` : category.name}
-                    className="bg-white border rounded-lg p-4 lg:p-6 hover:shadow-lg transition-all cursor-pointer group"
-                    style={{ borderColor: '#e5e5e5' }}
-                    onMouseOver={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
-                    onMouseOut={(e) => e.currentTarget.style.borderColor = '#e5e5e5'}
-                    onClick={() => handleIndustryClick(category.name)}
-                  >
-                    <div className="text-3xl lg:text-4xl mb-2 lg:mb-3">{category.icon}</div>
-                    <h3 className="font-semibold transition-colors group-hover:text-[#FF6B00] text-sm lg:text-base truncate" style={{ color: '#2D2C2C' }}>
-                      {category.name}
-                    </h3>
-                  </div>
-                ))}
+                {topCategories.map((category, index) => {
+                  const slug = industriesLoading || category.name === 'Loading...' ? '#' : 
+                    `/industry/${category.name
+                      .toLowerCase()
+                      .replace(/[&]/g, 'and')
+                      .replace(/[^a-z0-9\s]/g, '')
+                      .replace(/\s+/g, '-')
+                      .replace(/-+/g, '-')
+                      .replace(/^-|-$/g, '')}`;
+                  
+                  return (
+                    <a
+                      key={industriesLoading ? `loading-${index}` : category.name}
+                      href={slug}
+                      className="bg-white border rounded-lg p-4 lg:p-6 hover:shadow-lg transition-all cursor-pointer group block"
+                      style={{ borderColor: '#e5e5e5' }}
+                      onMouseOver={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
+                      onMouseOut={(e) => e.currentTarget.style.borderColor = '#e5e5e5'}
+                      aria-label={`Browse ${category.name} products and suppliers`}
+                    >
+                      <div className="text-3xl lg:text-4xl mb-2 lg:mb-3" aria-hidden="true">{category.icon}</div>
+                      <h3 className="font-semibold transition-colors group-hover:text-[#FF6B00] text-sm lg:text-base truncate" style={{ color: '#2D2C2C' }}>
+                        {category.name}
+                      </h3>
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </>
