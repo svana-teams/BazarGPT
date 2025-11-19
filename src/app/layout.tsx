@@ -18,12 +18,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BazarGPT - Find 165,000+ B2B Products & Verified Suppliers | AI-Powered Marketplace",
-  description: "Discover 165,000+ industrial products from verified suppliers on BazarGPT. Get instant quotes for machinery, equipment, electronics & more. AI-powered search for B2B procurement.",
+  title: "BazarGPT - Find B2B Products & Verified Suppliers | AI-Powered Marketplace",
+  description: "Discover thousands of industrial products from verified suppliers on BazarGPT. Get instant quotes for machinery, equipment, electronics & more. AI-powered search for B2B procurement.",
   keywords: "B2B marketplace, industrial products, suppliers, machinery, equipment, electronics, manufacturing, procurement, quotes, verified suppliers",
   openGraph: {
-    title: "BazarGPT - Find 165,000+ B2B Products & Verified Suppliers",
-    description: "Discover 165,000+ industrial products from verified suppliers. Get instant quotes for machinery, equipment, electronics & more.",
+    title: "BazarGPT - Find B2B Products & Verified Suppliers",
+    description: "Discover thousands of industrial products from verified suppliers. Get instant quotes for machinery, equipment, electronics & more.",
     url: "https://bazargpt.com",
     siteName: "BazarGPT",
     type: "website",
@@ -38,8 +38,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BazarGPT - Find 165,000+ B2B Products & Verified Suppliers",
-    description: "Discover 165,000+ industrial products from verified suppliers. Get instant quotes for machinery, equipment, electronics & more.",
+    title: "BazarGPT - Find B2B Products & Verified Suppliers",
+    description: "Discover thousands of industrial products from verified suppliers. Get instant quotes for machinery, equipment, electronics & more.",
     images: ["/logo1.png"]
   },
   robots: {
@@ -82,7 +82,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "BazarGPT",
-              "description": "AI-powered B2B marketplace with 165,000+ industrial products from verified suppliers",
+              "description": "AI-powered B2B marketplace with thousands of industrial products from verified suppliers",
               "url": "https://bazargpt.com",
               "potentialAction": {
                 "@type": "SearchAction",

@@ -13,7 +13,7 @@ export default function Footer() {
           {/* Company Info */}
           <div>
             <h4 className="font-bold text-lg mb-4" style={{ color: '#FF6B00' }}>BazarGPT</h4>
-            <p className="text-sm text-gray-400 mb-4">India's leading B2B marketplace with 165,000+ products from verified suppliers.</p>
+            <p className="text-sm text-gray-400 mb-4">India's leading B2B marketplace with thousands of products from verified suppliers.</p>
             <div className="text-sm text-gray-400">
               <p>📞 +91-8431209936</p>
               <p>✉️ support@bazargpt.com</p>
