@@ -6,8 +6,8 @@ export async function GET() {
   const baseUrl = 'https://bazargpt.com';
   
   try {
-    // Get all industries for industry pages
-    const industries = await prisma.industry.findMany({
+    // Get all sectors for industry pages
+    const sectors = await prisma.sector.findMany({
       select: { name: true }
     });
 
@@ -22,9 +22,9 @@ export async function GET() {
       { url: '/help', priority: '0.8', changefreq: 'monthly' }
     ];
 
-    // Industry pages
-    const industryPages = industries.map(industry => ({
-      url: `/industry/${industry.name
+    // Industry pages (using sectors)
+    const industryPages = sectors.map(sector => ({
+      url: `/industry/${sector.name
         .toLowerCase()
         .replace(/[&]/g, 'and')
         .replace(/[^a-z0-9\s]/g, '')
