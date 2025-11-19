@@ -71,6 +71,7 @@ export default function Home() {
   ];
 
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>(staticProducts);
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [allSubcategoryProducts, setAllSubcategoryProducts] = useState<Product[]>([]);
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -143,7 +144,7 @@ export default function Home() {
       
       if (data.success && data.results) {
         // Transform results to match Product interface
-        const searchResults = data.results.map((result: any) => ({
+        const transformedResults = data.results.map((result: any) => ({
           id: result.id,
           name: result.name,
           modifiedName: result.display_name,
@@ -157,8 +158,8 @@ export default function Home() {
           industry: 'Various'
         }));
         
-        console.log('Transformed search results:', searchResults);
-        setFeaturedProducts(searchResults);
+        console.log('Popular search results:', transformedResults);
+        setSearchResults(transformedResults);
         setCurrentProductIndex(0);
       }
     } catch (error) {
@@ -180,8 +181,11 @@ export default function Home() {
         console.log('Search API response:', data);
         
         if (data.success && data.results) {
+          console.log('🔍 Raw API results count:', data.results.length);
+          console.log('🔍 First 3 raw results:', data.results.slice(0, 3));
+          
           // Transform results to match Product interface
-          const searchResults = data.results.map((result: any) => ({
+          const transformedResults = data.results.map((result: any) => ({
             id: result.id,
             name: result.name,
             modifiedName: result.display_name,
@@ -195,8 +199,9 @@ export default function Home() {
             industry: 'Various'
           }));
           
-          console.log('Transformed search results:', searchResults);
-          setFeaturedProducts(searchResults);
+          console.log('🔍 Transformed results count:', transformedResults.length);
+          console.log('🔍 Setting search results state...');
+          setSearchResults(transformedResults);
           setCurrentProductIndex(0);
         }
       } catch (error) {
@@ -589,7 +594,7 @@ export default function Home() {
               <button
                 onClick={() => {
                   setSearchValue('');
-                  setFeaturedProducts(staticProducts);
+                  setSearchResults([]);
                   setCurrentProductIndex(0);
                 }}
                 className="text-sm text-gray-600 hover:text-gray-800 underline"
@@ -615,7 +620,16 @@ export default function Home() {
                 </div>
               ))
             ) : (
-              featuredProducts.slice(0, 20).map((product, index) => (
+              (() => {
+                const productsToShow = searchValue.trim() ? searchResults : featuredProducts;
+                console.log('🎨 Rendering products. Search active:', !!searchValue.trim());
+                console.log('🎨 Search value:', searchValue);
+                console.log('🎨 SearchResults array length:', searchResults.length);
+                console.log('🎨 FeaturedProducts array length:', featuredProducts.length);
+                console.log('🎨 Products to show length:', productsToShow.length);
+                console.log('🎨 Will display:', productsToShow.slice(0, 20).length, 'products');
+                return productsToShow.slice(0, 20);
+              })().map((product, index) => (
                 <div
                   key={`${product.id}-${currentProductIndex}`}
                   className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all cursor-pointer group animate-fadeIn"
