@@ -1,10 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 
-// Direct modular imports - much more efficient than dynamic imports
-import { Search, Mail, Phone, X } from 'lucide-react';
+// Critical icons only - load immediately
+import { Search } from 'lucide-react';
+
+// Non-critical icons - load dynamically
+const Mail = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Mail })), { ssr: false });
+const Phone = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Phone })), { ssr: false });
+const X = dynamic(() => import('lucide-react').then(mod => ({ default: mod.X })), { ssr: false });
 
 interface Message {
   id: string;
@@ -35,7 +41,10 @@ interface Industry {
 interface Product {
   id: number;
   name: string;
+  modifiedName?: string | null;
+  modifiedDescription?: string | null;
   imageUrl: string | null;
+  imageDescription?: string | null;
   price: string | null;
   priceUnit: string | null;
   brand: string | null;
@@ -56,13 +65,68 @@ export default function Home() {
   const [searchValue, setSearchValue] = useState('');
   const [featuredSuppliers, setFeaturedSuppliers] = useState<Supplier[]>([]);
   const [industries, setIndustries] = useState<Industry[]>([]);
-  // Static products for instant LCP - no loading state needed
+  // Static products for instant LCP - real data from database
   const staticProducts: Product[] = [
-    { id: 1, name: 'Industrial Electric Motor', imageUrl: null, price: '₹15,000', priceUnit: null, brand: null, supplier: { name: 'Industrial Solutions', location: 'Mumbai' }, subcategory: { name: 'Electric Motors', productCount: 0 }, category: 'Motors', industry: 'Industrial' },
-    { id: 2, name: 'Commercial Refrigeration Unit', imageUrl: null, price: '₹45,000', priceUnit: null, brand: null, supplier: { name: 'Cool Tech', location: 'Delhi' }, subcategory: { name: 'Refrigeration', productCount: 0 }, category: 'Cooling', industry: 'Commercial' },
-    { id: 3, name: 'Cable Management System', imageUrl: null, price: '₹8,500', priceUnit: null, brand: null, supplier: { name: 'ElectroWorks', location: 'Chennai' }, subcategory: { name: 'Electrical Cables', productCount: 0 }, category: 'Electrical', industry: 'Infrastructure' },
-    { id: 4, name: 'Biometric Access Control', imageUrl: null, price: '₹25,000', priceUnit: null, brand: null, supplier: { name: 'SecureTech', location: 'Bangalore' }, subcategory: { name: 'Access Control', productCount: 0 }, category: 'Security', industry: 'Technology' },
-    { id: 5, name: 'Food Processing Machine', imageUrl: null, price: '₹35,000', priceUnit: null, brand: null, supplier: { name: 'FoodTech', location: 'Pune' }, subcategory: { name: 'Food Processing', productCount: 0 }, category: 'Processing', industry: 'Food' }
+    { 
+      id: 263763, 
+      name: 'ProActive Power Cage', 
+      imageUrl: 'https://cdn.bazargpt.com/images/power-cage-rack.png', 
+      price: '₹38,000', 
+      priceUnit: null, 
+      brand: 'ProActive Fitness', 
+      supplier: { name: 'ProActive Fitness', location: 'Delhi' }, 
+      subcategory: { name: 'Squat Rack', productCount: 0 }, 
+      category: 'Fitness Equipment', 
+      industry: 'Sports & Fitness' 
+    },
+    { 
+      id: 263761, 
+      name: 'FRP Umbrella Garden Fountain', 
+      imageUrl: 'https://cdn.bazargpt.com/images/frp-umbrella-fountain.jpg', 
+      price: '₹40,000', 
+      priceUnit: null, 
+      brand: 'Others', 
+      supplier: { name: 'MOUNTECH', location: 'Faridabad, Haryana' }, 
+      subcategory: { name: 'FRP Fountain', productCount: 0 }, 
+      category: 'Garden Decor', 
+      industry: 'Landscaping' 
+    },
+    { 
+      id: 263762, 
+      name: 'Silver Stainless Steel Commercial Exhaust Equipment', 
+      imageUrl: 'https://cdn.bazargpt.com/images/commercial-exhaust-system.png', 
+      price: '₹55,000', 
+      priceUnit: null, 
+      brand: 'Max Air', 
+      supplier: { name: 'Max Air Hvacs Industries', location: 'Gurugram, Haryana' }, 
+      subcategory: { name: 'Commercial Exhaust System', productCount: 0 }, 
+      category: 'Kitchen Equipment', 
+      industry: 'Commercial Kitchen' 
+    },
+    { 
+      id: 263760, 
+      name: 'Aluminium Exhaust Component GX160', 
+      imageUrl: 'https://cdn.bazargpt.com/images/exhaust-component-gx160.jpg', 
+      price: '₹1,500', 
+      priceUnit: null, 
+      brand: 'Others', 
+      supplier: { name: 'GOEL TRADING CO.', location: 'Delhi' }, 
+      subcategory: { name: 'Engine Components', productCount: 0 }, 
+      category: 'Automotive Parts', 
+      industry: 'Automotive' 
+    },
+    { 
+      id: 263759, 
+      name: 'Chicago Pneumatic Screw Compressor', 
+      imageUrl: 'https://cdn.bazargpt.com/images/chicago-pneumatic-compressor.jpg', 
+      price: '₹4,00,000', 
+      priceUnit: null, 
+      brand: 'Chicago Pneumatics', 
+      supplier: { name: 'EUTAIR EQUIPMENTS LLP', location: 'Delhi' }, 
+      subcategory: { name: 'Air Compressor', productCount: 0 }, 
+      category: 'Industrial Machinery', 
+      industry: 'Manufacturing' 
+    }
   ];
 
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>(staticProducts);
@@ -96,9 +160,23 @@ export default function Home() {
       'Hospital Equipments': '🏥',
       'Industrial Supplies': '🏭',
       'Machinery': '⚙️',
-      'Refrigeration': '🧊'
+      'Refrigeration': '🧊',
+      'Commercial Kitchen': '🍳',
+      'Fashion Accessories & Gear': '👕',
+      'Food & Beverages': '🍽️',
+      'Interior Designing & Decoration': '🏡',
+      'Sports Goods, Toys & Games': '⚽',
+      'Agriculture & Food': '🌾',
+      'Automotive': '🚗',
+      'Textiles': '🧵',
+      'Construction': '🏗️',
+      'Chemical': '🧪',
+      'Packaging': '📦',
+      'Healthcare': '💊',
+      'Beauty & Personal Care': '💄',
+      'Education & Training': '📚'
     };
-    return iconMap[industryName] || '📦';
+    return iconMap[industryName] || '🏢';
   };
 
   const topCategories = industriesLoading 
@@ -111,10 +189,42 @@ export default function Home() {
         icon: getIndustryIcon(industry.name)
       }));
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (searchValue.trim()) {
       console.log('Searching for:', searchValue);
-      // Add search logic here
+      setProductsLoading(true);
+      
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(searchValue)}`);
+        const data = await response.json();
+        
+        console.log('Search API response:', data);
+        
+        if (data.success && data.results) {
+          // Transform results to match Product interface
+          const searchResults = data.results.map((result: any) => ({
+            id: result.id,
+            name: result.name,
+            modifiedName: result.display_name,
+            imageUrl: result.imageUrl,
+            price: result.price,
+            priceUnit: null,
+            brand: result.brand,
+            supplier: { name: 'Search Result', location: 'Various' },
+            subcategory: { name: 'Search', productCount: 0 },
+            category: 'Search Results',
+            industry: 'Various'
+          }));
+          
+          console.log('Transformed search results:', searchResults);
+          setFeaturedProducts(searchResults);
+          setCurrentProductIndex(0);
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+      } finally {
+        setProductsLoading(false);
+      }
     }
   };
 
@@ -222,23 +332,10 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const fetchFeaturedSuppliers = async () => {
-      try {
-        const response = await fetch('/api/suppliers/featured');
-        const result = await response.json();
-        
-        if (result.success) {
-          setFeaturedSuppliers(result.data);
-        } else {
-          console.error('Failed to fetch suppliers:', result.error);
-        }
-      } catch (error) {
-        console.error('Error fetching featured suppliers:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
+    // Optimize loading with setTimeout to avoid blocking initial render
+    const timeoutIds: NodeJS.Timeout[] = [];
+    
+    // Load critical content first (industries for navigation)
     const fetchIndustries = async () => {
       try {
         const response = await fetch('/api/sectors');
@@ -253,6 +350,24 @@ export default function Home() {
         console.error('Error fetching industries:', error);
       } finally {
         setIndustriesLoading(false);
+      }
+    };
+
+    // Load less critical content with delay to avoid blocking
+    const fetchFeaturedSuppliers = async () => {
+      try {
+        const response = await fetch('/api/suppliers/featured');
+        const result = await response.json();
+        
+        if (result.success) {
+          setFeaturedSuppliers(result.data);
+        } else {
+          console.error('Failed to fetch suppliers:', result.error);
+        }
+      } catch (error) {
+        console.error('Error fetching featured suppliers:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -272,9 +387,17 @@ export default function Home() {
       }
     };
 
-    fetchFeaturedSuppliers();
+    // Load industries immediately (critical for LCP)
     fetchIndustries();
-    fetchFeaturedProducts();
+    
+    // Load other content with small delays to prevent blocking
+    timeoutIds.push(setTimeout(fetchFeaturedSuppliers, 100));
+    timeoutIds.push(setTimeout(fetchFeaturedProducts, 200));
+    
+    // Cleanup timeouts
+    return () => {
+      timeoutIds.forEach(clearTimeout);
+    };
   }, []);
 
 
@@ -294,7 +417,7 @@ export default function Home() {
             </span>
           </div>
           <div className="flex gap-4">
-            <button onClick={() => router.push('/help')} className="transition-colors" style={{ color: 'white' }} onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Help</button>
+            <button onClick={() => router.push('/help')} className="transition-colors" style={{ color: 'white' }} onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'} aria-label="Get help and support">Help</button>
           </div>
         </div>
       </div>
@@ -332,6 +455,7 @@ export default function Home() {
                   style={{ backgroundColor: '#FF6B00' }}
                   onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e55e00'}
                   onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#FF6B00'}
+                  aria-label="Search products and suppliers"
                 >
                   <Search className="w-4 lg:w-5 h-4 lg:h-5" />
                   <span className="font-medium text-sm lg:text-base hidden sm:inline">Search</span>
@@ -346,8 +470,8 @@ export default function Home() {
         <div style={{ backgroundColor: '#0D1B2A' }} className="text-white hidden lg:block">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center gap-6 py-2 text-sm">
-              <button className="transition-colors font-medium" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>All Categories</button>
-              <button onClick={() => router.push('/help')} className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'}>Help Center</button>
+              <button className="transition-colors font-medium" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'} aria-label="Browse all product categories">All Categories</button>
+              <button onClick={() => router.push('/help')} className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = 'white'} aria-label="Access help center and support">Help Center</button>
             </div>
           </div>
         </div>
@@ -355,17 +479,20 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-4 lg:py-8 overflow-hidden">
-        {/* Hero Banner - Optimized for LCP */}
-        <div className="rounded-lg p-6 lg:p-10 mb-6 lg:mb-8" style={{ backgroundColor: '#0D1B2A', contain: 'layout style' }}>
+        {!searchValue.trim() && (
+          <>
+            {/* Hero Banner - Optimized for LCP */}
+            <div className="rounded-lg p-6 lg:p-10 mb-6 lg:mb-8" style={{ backgroundColor: '#0D1B2A', contain: 'layout style' }}>
           <h1 className="text-2xl lg:text-4xl font-bold mb-3 font-sans" style={{ color: '#f0f0f0' }}>Find Quality Products from Verified Suppliers</h1>
           <p className="mb-6 text-base lg:text-lg" style={{ color: '#e0e0e0' }}>Connect with millions of B2B buyers and sellers worldwide</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleRFQOpen}
               className="px-6 lg:px-8 py-3 rounded-md font-semibold transition-all shadow-md hover:shadow-lg text-sm lg:text-base"
-              style={{ backgroundColor: '#FF6B00', color: 'white' }}
-              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e55e00'}
-              onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#FF6B00'}
+              style={{ backgroundColor: '#E85A00', color: 'white' }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#D14E00'}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#E85A00'}
+              aria-label="Request quotation for products from suppliers"
             >
               Request for Quotation
             </button>
@@ -381,90 +508,84 @@ export default function Home() {
                 e.currentTarget.style.backgroundColor = 'transparent';
                 e.currentTarget.style.color = 'white';
               }}
+              aria-label="Explore our featured products catalog"
             >
               Explore Products
             </button>
           </div>
         </div>
 
-        {/* Popular Searches */}
-        <div className="mb-8">
-          <h2 className="text-base font-semibold mb-3" style={{ color: '#2D2C2C' }}>Popular Searches:</h2>
-          <div className="flex flex-wrap gap-2">
-            {popularSearches.map((term) => (
-              <button
-                key={term}
-                className="px-4 py-2 bg-white border rounded-full text-sm transition-all shadow-sm"
-                style={{ borderColor: '#d1d5db', color: '#2D2C2C' }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.borderColor = '#FF6B00';
-                  e.currentTarget.style.color = '#FF6B00';
-                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(255, 107, 0, 0.2)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.borderColor = '#d1d5db';
-                  e.currentTarget.style.color = '#2D2C2C';
-                  e.currentTarget.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.05)';
-                }}
-              >
-                {term}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Top Categories */}
-        <div className="mb-8 lg:mb-12">
-          <div className="flex items-center justify-between mb-4 lg:mb-6">
-            <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>Browse by Industry</h2>
-            <button
-              onClick={() => handleViewAll('industries')}
-              className="font-medium text-sm flex items-center gap-1 transition-colors"
-              style={{ color: '#FF6B00' }}
-              onMouseOver={(e) => e.currentTarget.style.color = '#e55e00'}
-              onMouseOut={(e) => e.currentTarget.style.color = '#FF6B00'}
-            >
-              View All
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 w-full">
-            {topCategories.map((category, index) => (
-              <div
-                key={industriesLoading ? `loading-${index}` : category.name}
-                className="bg-white border rounded-lg p-4 lg:p-6 hover:shadow-lg transition-all cursor-pointer group"
-                style={{ borderColor: '#e5e5e5' }}
-                onMouseOver={(e) => e.currentTarget.style.borderColor = '#FF6B00'}
-                onMouseOut={(e) => e.currentTarget.style.borderColor = '#e5e5e5'}
-                onClick={() => handleIndustryClick(category.name)}
-              >
-                <div className="text-3xl lg:text-4xl mb-2 lg:mb-3">{category.icon}</div>
-                <h3 className="font-semibold transition-colors group-hover:text-[#FF6B00] text-sm lg:text-base truncate" style={{ color: '#2D2C2C' }}>
-                  {category.name}
-                </h3>
+            {/* Popular Searches */}
+            <div className="mb-8">
+              <h2 className="text-base font-semibold mb-3" style={{ color: '#2D2C2C' }}>Popular Searches:</h2>
+              <div className="flex flex-wrap gap-2">
+                {popularSearches.map((term) => (
+                  <button
+                    key={term}
+                    className="px-4 py-2 bg-white border rounded-full text-sm transition-all shadow-sm"
+                    style={{ borderColor: '#d1d5db', color: '#2D2C2C' }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.borderColor = '#FF6B00';
+                      e.currentTarget.style.color = '#FF6B00';
+                      e.currentTarget.style.boxShadow = '0 2px 4px rgba(255, 107, 0, 0.2)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.borderColor = '#d1d5db';
+                      e.currentTarget.style.color = '#2D2C2C';
+                      e.currentTarget.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.05)';
+                    }}
+                    aria-label={`Search for ${term}`}
+                  >
+                    {term}
+                  </button>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
+
+            {/* Top Categories */}
+            <div className="mb-8 lg:mb-12">
+              <div className="flex items-center justify-between mb-4 lg:mb-6">
+                <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>Browse by Industry</h2>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 w-full">
+                {topCategories.map((category, index) => (
+                  <div
+                    key={industriesLoading ? `loading-${index}` : category.name}
+                    className="bg-white border rounded-lg p-4 lg:p-6 hover:shadow-lg transition-all cursor-pointer group"
+                    style={{ borderColor: '#e5e5e5' }}
+                    onMouseOver={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
+                    onMouseOut={(e) => e.currentTarget.style.borderColor = '#e5e5e5'}
+                    onClick={() => handleIndustryClick(category.name)}
+                  >
+                    <div className="text-3xl lg:text-4xl mb-2 lg:mb-3">{category.icon}</div>
+                    <h3 className="font-semibold transition-colors group-hover:text-[#FF6B00] text-sm lg:text-base truncate" style={{ color: '#2D2C2C' }}>
+                      {category.name}
+                    </h3>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Top Products */}
         <div id="top-products" className="mb-8 lg:mb-12">
           <div className="flex items-center justify-between mb-4 lg:mb-6">
-            <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>Top Products</h2>
-            <button
-              onClick={() => handleViewAll('products')}
-              className="font-medium text-sm flex items-center gap-1 transition-colors"
-              style={{ color: '#FF6B00' }}
-              onMouseOver={(e) => e.currentTarget.style.color = '#e55e00'}
-              onMouseOut={(e) => e.currentTarget.style.color = '#FF6B00'}
-            >
-              View All
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+            <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>
+              {searchValue.trim() ? `Search Results for "${searchValue}"` : 'Top Products'}
+            </h2>
+            {searchValue.trim() && (
+              <button
+                onClick={() => {
+                  setSearchValue('');
+                  setFeaturedProducts(staticProducts);
+                  setCurrentProductIndex(0);
+                }}
+                className="text-sm text-gray-600 hover:text-gray-800 underline"
+              >
+                Clear Search
+              </button>
+            )}
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4 w-full">
             {productsLoading ? (
@@ -490,12 +611,13 @@ export default function Home() {
                   style={{
                     animationDelay: `${index * 100}ms`
                   }}
+                  title={product.modifiedDescription || `${product.modifiedName || product.name} - ${product.supplier.name}`}
                 >
                   <div className="bg-gray-100 h-32 lg:h-40 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
                     {product.imageUrl ? (
                       <img 
                         src={product.imageUrl} 
-                        alt={`${product.name} - Professional ${product.subcategory?.name || 'industrial product'} for commercial applications`}
+                        alt={product.imageDescription || `${product.modifiedName || product.name} - Professional ${product.subcategory?.name || 'industrial product'} for commercial applications`}
                         className="w-full h-full object-cover"
                         loading="lazy" // Lazy load images for better LCP
                         onError={(e) => {
@@ -513,7 +635,7 @@ export default function Home() {
                   </div>
                   <div className="p-3 lg:p-4">
                     <h3 className="font-medium mb-2 text-xs lg:text-sm line-clamp-2 transition-colors group-hover:text-gray-800" style={{ color: '#2D2C2C' }}>
-                      {product.name}
+                      {product.modifiedName || product.name}
                     </h3>
                     <p className="font-bold text-sm lg:text-base mb-1" style={{ color: '#1f2937' }}>
                       {product.price ? `${product.price}${product.priceUnit ? `/${product.priceUnit}` : ''}` : 'Price on request'}
@@ -526,8 +648,8 @@ export default function Home() {
                         {product.subcategory.name}
                       </p>
                     )}
-                    <p className="text-xs text-gray-600 truncate">{product.supplier.name}</p>
-                    <p className="text-xs text-gray-500 truncate">{product.supplier.location}</p>
+                    <p className="text-xs text-gray-600 truncate">Supplier: {product.supplier.name}</p>
+                    <p className="text-xs text-gray-500 truncate">Location: {product.supplier.location}</p>
                   </div>
                 </div>
               ))
@@ -535,57 +657,49 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Promotional Banner */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8 lg:mb-12">
-          <div className="rounded-lg p-4 lg:p-6 flex flex-col lg:flex-row items-center justify-between border-2" style={{ backgroundColor: '#e6f7ff', borderColor: '#00C8FF' }}>
-            <div className="text-center lg:text-left mb-4 lg:mb-0">
-              <h3 className="text-lg lg:text-xl font-bold mb-2" style={{ color: '#0D1B2A' }}>Get Your First Order</h3>
-              <p className="mb-3 text-sm lg:text-base text-gray-700">Special discount for new buyers</p>
-              <button
-                className="px-5 py-2 rounded-md font-semibold transition-all text-sm text-white shadow-sm"
-                style={{ backgroundColor: '#00C8FF' }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0096cc'}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#00C8FF'}
-              >
-                Claim Offer
-              </button>
+        {!searchValue.trim() && (
+          <>
+            {/* Promotional Banner */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8 lg:mb-12">
+              <div className="rounded-lg p-4 lg:p-6 flex flex-col lg:flex-row items-center justify-between border-2" style={{ backgroundColor: '#f1f5f9', borderColor: '#0D1B2A' }}>
+                <div className="text-center lg:text-left mb-4 lg:mb-0">
+                  <h3 className="text-lg lg:text-xl font-bold mb-2" style={{ color: '#0D1B2A' }}>Get Your First Order</h3>
+                  <p className="mb-3 text-sm lg:text-base text-gray-700">Special discount for new buyers</p>
+                  <button
+                    className="px-5 py-2 rounded-md font-semibold transition-all text-sm text-white shadow-sm"
+                    style={{ backgroundColor: '#0D1B2A' }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1E293B'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#0D1B2A'}
+                    aria-label="Claim special discount offer for new buyers"
+                  >
+                    Claim Offer
+                  </button>
+                </div>
+                <div className="text-4xl lg:text-6xl">🎁</div>
+              </div>
+              <div className="rounded-lg p-4 lg:p-6 flex flex-col lg:flex-row items-center justify-between border-2" style={{ backgroundColor: '#f9fafb', borderColor: '#374151' }}>
+                <div className="text-center lg:text-left mb-4 lg:mb-0">
+                  <h3 className="text-lg lg:text-xl font-bold mb-2" style={{ color: '#0D1B2A' }}>Trade Assurance</h3>
+                  <p className="mb-3 text-sm lg:text-base text-gray-700">Protected payment for safe trading</p>
+                  <button
+                    className="px-5 py-2 rounded-md font-semibold transition-all text-sm text-white shadow-sm"
+                    style={{ backgroundColor: '#FF6B00' }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e55e00'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#FF6B00'}
+                    aria-label="Learn more about Trade Assurance and protected payments"
+                  >
+                    Learn More
+                  </button>
+                </div>
+                <div className="text-4xl lg:text-6xl">🛡️</div>
+              </div>
             </div>
-            <div className="text-4xl lg:text-6xl">🎁</div>
-          </div>
-          <div className="rounded-lg p-4 lg:p-6 flex flex-col lg:flex-row items-center justify-between border-2" style={{ backgroundColor: '#f9fafb', borderColor: '#374151' }}>
-            <div className="text-center lg:text-left mb-4 lg:mb-0">
-              <h3 className="text-lg lg:text-xl font-bold mb-2" style={{ color: '#0D1B2A' }}>Trade Assurance</h3>
-              <p className="mb-3 text-sm lg:text-base text-gray-700">Protected payment for safe trading</p>
-              <button
-                className="px-5 py-2 rounded-md font-semibold transition-all text-sm text-white shadow-sm"
-                style={{ backgroundColor: '#FF6B00' }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e55e00'}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#FF6B00'}
-              >
-                Learn More
-              </button>
-            </div>
-            <div className="text-4xl lg:text-6xl">🛡️</div>
-          </div>
-        </div>
 
-        {/* Featured Suppliers */}
-        <div className="mb-8 lg:mb-12">
-          <div className="flex items-center justify-between mb-4 lg:mb-6">
-            <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>Featured Suppliers</h2>
-            <button
-              onClick={() => handleViewAll('suppliers')}
-              className="font-medium text-sm flex items-center gap-1 transition-colors"
-              style={{ color: '#FF6B00' }}
-              onMouseOver={(e) => e.currentTarget.style.color = '#e55e00'}
-              onMouseOut={(e) => e.currentTarget.style.color = '#FF6B00'}
-            >
-              View All
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
+            {/* Featured Suppliers */}
+            <div className="mb-8 lg:mb-12">
+              <div className="flex items-center justify-between mb-4 lg:mb-6">
+                <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>Featured Suppliers</h2>
+              </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
             {loading ? (
               Array.from({ length: 4 }).map((_, idx) => (
@@ -613,7 +727,7 @@ export default function Home() {
                 key={supplier.id}
                 className="bg-white border rounded-lg p-4 lg:p-6 hover:shadow-lg transition-all cursor-pointer"
                 style={{ borderColor: '#e5e5e5' }}
-                onMouseOver={(e) => e.currentTarget.style.borderColor = '#FF6B00'}
+                onMouseOver={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
                 onMouseOut={(e) => e.currentTarget.style.borderColor = '#e5e5e5'}
               >
                 <div className="flex items-start justify-between mb-3">
@@ -638,14 +752,13 @@ export default function Home() {
                 </div>
                 <button
                   className="mt-4 w-full py-2 border rounded-md transition-colors text-sm font-medium"
-                  style={{ borderColor: '#FF6B00', color: '#FF6B00' }}
-                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#ffe8d9'}
+                  style={{ borderColor: '#000000', color: '#000000' }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
                   onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                   onClick={() => {
-                    if (supplier.mobile) {
-                      window.open(`tel:${supplier.mobile}`, '_self');
-                    }
+                    window.open(`tel:9228847777`, '_self');
                   }}
+                  aria-label={`Contact ${supplier.name} - Call 9228847777`}
                 >
                   Contact Supplier
                 </button>
@@ -655,8 +768,7 @@ export default function Home() {
           </div>
         </div>
 
-
-        {/* Features Section */}
+            {/* Features Section */}
         <div className="mt-8 lg:mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 w-full">
           <div className="bg-white rounded-lg p-4 lg:p-6 border border-gray-200 shadow-sm">
             <div className="w-12 lg:w-14 h-12 lg:h-14 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#FF6B00' }}>
@@ -686,25 +798,9 @@ export default function Home() {
             <p className="text-gray-700 text-sm leading-relaxed">Get quotes from suppliers within 24 hours</p>
           </div>
         </div>
+          </>
+        )}
       </main>
-
-      {/* Footer */}
-      <footer className="text-white mt-8 lg:mt-16" style={{ backgroundColor: '#0D1B2A' }}>
-        <div className="max-w-7xl mx-auto px-4 py-8 lg:py-12">
-          <div className="flex justify-center">
-            <div>
-              <h4 className="font-semibold mb-4 text-center">Help & Support</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><button onClick={() => router.push('/help')} className="transition-colors" onMouseOver={(e) => e.currentTarget.style.color = '#FF6B00'} onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}>Help Center</button></li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-6 lg:mt-8 pt-6 lg:pt-8 text-center text-xs lg:text-sm text-gray-400" style={{ borderTop: '1px solid #1a2f47' }}>
-            <p>&copy; 2024 BazarGPT. All rights reserved.</p>
-            <p className="mt-2 lg:mt-0 lg:inline"> | Privacy Policy | Terms of Use</p>
-          </div>
-        </div>
-      </footer>
 
       {/* Request for Quotation Modal */}
       {showRFQModal && (
@@ -718,6 +814,7 @@ export default function Home() {
               <button
                 onClick={handleRFQClose}
                 className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Close Request for Quotation modal"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -792,6 +889,7 @@ export default function Home() {
                 <button
                   onClick={handleRFQClose}
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                  aria-label="Cancel and close RFQ form"
                 >
                   Cancel
                 </button>
@@ -810,6 +908,7 @@ export default function Home() {
                       e.currentTarget.style.backgroundColor = '#FF6B00';
                     }
                   }}
+                  aria-label="Submit request for quotation to suppliers"
                 >
                   {isRfqSubmitting ? 'Sending...' : 'Submit Request'}
                 </button>

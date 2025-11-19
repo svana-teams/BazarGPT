@@ -54,6 +54,7 @@ lcp-*.json
 /products/
 /script/
 /transfer-package/
+/archive/
 DATABASE_SETUP.md
 PARALLEL_SCRAPING_GUIDE.md
 TRANSFER_GUIDE.md

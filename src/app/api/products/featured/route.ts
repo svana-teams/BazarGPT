@@ -11,7 +11,11 @@ export async function GET() {
       select: {
         id: true,
         name: true,
+        modifiedName: true,
+        modifiedDescription: true,
         imageUrl: true,
+        modifiedImageUrl: true,
+        imageDescription: true,
         price: true,
         priceUnit: true,
         brand: true,
@@ -46,7 +50,10 @@ export async function GET() {
     const featuredProducts = products.map(product => ({
       id: product.id,
       name: product.name,
-      imageUrl: product.imageUrl,
+      modifiedName: product.modifiedName,
+      modifiedDescription: product.modifiedDescription,
+      imageUrl: product.modifiedImageUrl || product.imageUrl,
+      imageDescription: product.imageDescription,
       price: product.price,
       priceUnit: product.priceUnit,
       brand: product.brand,
