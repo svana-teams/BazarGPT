@@ -358,7 +358,7 @@ export default function Home() {
         if (result.success && result.data.length > 0) {
           setAllSubcategoryProducts(result.data);
           // Replace static products with real ones after initial render
-          setFeaturedProducts(result.data.slice(0, 5));
+          setFeaturedProducts(result.data.slice(0, 20));
         }
       } catch (error) {
         console.error('Error fetching featured products:', error);
@@ -598,9 +598,9 @@ export default function Home() {
               </button>
             )}
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4 w-full">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 w-full">
             {productsLoading ? (
-              Array.from({ length: 5 }).map((_, idx) => (
+              Array.from({ length: 20 }).map((_, idx) => (
                 <div
                   key={idx}
                   className="bg-white border border-gray-200 rounded-lg overflow-hidden animate-pulse"
@@ -615,7 +615,7 @@ export default function Home() {
                 </div>
               ))
             ) : (
-              featuredProducts.slice(0, 5).map((product, index) => (
+              featuredProducts.slice(0, 20).map((product, index) => (
                 <div
                   key={`${product.id}-${currentProductIndex}`}
                   className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all cursor-pointer group animate-fadeIn"

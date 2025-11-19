@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       FROM "Product" 
       WHERE embedding IS NOT NULL
       ORDER BY embedding <=> ${vectorString}::vector
-      LIMIT 10
+      LIMIT 20
     `;
 
     // If no good vector results or query doesn't match chocolate/biscuit domain, 
@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
             ELSE 3
           END,
           id DESC
-        LIMIT 10
+        LIMIT 20
       `;
     }
 
