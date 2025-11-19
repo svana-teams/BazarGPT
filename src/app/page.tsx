@@ -130,6 +130,44 @@ export default function Home() {
         icon: getIndustryIcon(industry.name)
       }));
 
+  const handlePopularSearch = async (term: string) => {
+    setSearchValue(term);
+    console.log('Searching for:', term);
+    setProductsLoading(true);
+    
+    try {
+      const response = await fetch(`/api/search?q=${encodeURIComponent(term)}`);
+      const data = await response.json();
+      
+      console.log('Search API response:', data);
+      
+      if (data.success && data.results) {
+        // Transform results to match Product interface
+        const searchResults = data.results.map((result: any) => ({
+          id: result.id,
+          name: result.name,
+          modifiedName: result.display_name,
+          imageUrl: result.imageUrl,
+          price: result.price,
+          priceUnit: null,
+          brand: result.brand,
+          supplier: { name: 'Search Result', location: 'Various' },
+          subcategory: { name: 'Search', productCount: 0 },
+          category: 'Search Results',
+          industry: 'Various'
+        }));
+        
+        console.log('Transformed search results:', searchResults);
+        setFeaturedProducts(searchResults);
+        setCurrentProductIndex(0);
+      }
+    } catch (error) {
+      console.error('Search error:', error);
+    } finally {
+      setProductsLoading(false);
+    }
+  };
+
   const handleSearch = async () => {
     if (searchValue.trim()) {
       console.log('Searching for:', searchValue);
@@ -369,8 +407,16 @@ export default function Home() {
           <div className="flex items-center gap-4 lg:gap-8 min-w-0">
             {/* Logo */}
             <div className="flex items-center gap-2 flex-shrink-0">
-              <div className="text-xl lg:text-2xl font-bold" style={{ color: '#FF6B00' }}>BazarGPT</div>
-              <div className="text-xs hidden sm:block" style={{ color: '#2D2C2C' }}>B2B Marketplace</div>
+              <button 
+                onClick={() => router.push('/')}
+                className="hover:opacity-80 transition-opacity"
+                aria-label="Go to BazarGPT homepage"
+              >
+                <div className="flex flex-col">
+                  <div className="text-xl lg:text-2xl font-bold" style={{ color: '#FF6B00' }}>BazarGPT</div>
+                  <div className="text-xs hidden sm:block" style={{ color: '#2D2C2C' }}>B2B Marketplace</div>
+                </div>
+              </button>
             </div>
 
             {/* Search Bar */}
@@ -463,7 +509,8 @@ export default function Home() {
                 {popularSearches.map((term) => (
                   <button
                     key={term}
-                    className="px-4 py-2 bg-white border rounded-full text-sm transition-all shadow-sm"
+                    onClick={() => handlePopularSearch(term)}
+                    className="px-4 py-2 bg-white border rounded-full text-sm transition-all shadow-sm hover:cursor-pointer"
                     style={{ borderColor: '#d1d5db', color: '#2D2C2C' }}
                     onMouseOver={(e) => {
                       e.currentTarget.style.borderColor = '#FF6B00';
