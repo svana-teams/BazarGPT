@@ -67,66 +67,7 @@ export default function Home() {
   const [industries, setIndustries] = useState<Industry[]>([]);
   // Static products for instant LCP - real data from database
   const staticProducts: Product[] = [
-    { 
-      id: 263763, 
-      name: 'ProActive Power Cage', 
-      imageUrl: 'https://cdn.bazargpt.com/images/power-cage-rack.png', 
-      price: '₹38,000', 
-      priceUnit: null, 
-      brand: 'ProActive Fitness', 
-      supplier: { name: 'ProActive Fitness', location: 'Delhi' }, 
-      subcategory: { name: 'Squat Rack', productCount: 0 }, 
-      category: 'Fitness Equipment', 
-      industry: 'Sports & Fitness' 
-    },
-    { 
-      id: 263761, 
-      name: 'FRP Umbrella Garden Fountain', 
-      imageUrl: 'https://cdn.bazargpt.com/images/frp-umbrella-fountain.jpg', 
-      price: '₹40,000', 
-      priceUnit: null, 
-      brand: 'Others', 
-      supplier: { name: 'MOUNTECH', location: 'Faridabad, Haryana' }, 
-      subcategory: { name: 'FRP Fountain', productCount: 0 }, 
-      category: 'Garden Decor', 
-      industry: 'Landscaping' 
-    },
-    { 
-      id: 263762, 
-      name: 'Silver Stainless Steel Commercial Exhaust Equipment', 
-      imageUrl: 'https://cdn.bazargpt.com/images/commercial-exhaust-system.png', 
-      price: '₹55,000', 
-      priceUnit: null, 
-      brand: 'Max Air', 
-      supplier: { name: 'Max Air Hvacs Industries', location: 'Gurugram, Haryana' }, 
-      subcategory: { name: 'Commercial Exhaust System', productCount: 0 }, 
-      category: 'Kitchen Equipment', 
-      industry: 'Commercial Kitchen' 
-    },
-    { 
-      id: 263760, 
-      name: 'Aluminium Exhaust Component GX160', 
-      imageUrl: 'https://cdn.bazargpt.com/images/exhaust-component-gx160.jpg', 
-      price: '₹1,500', 
-      priceUnit: null, 
-      brand: 'Others', 
-      supplier: { name: 'GOEL TRADING CO.', location: 'Delhi' }, 
-      subcategory: { name: 'Engine Components', productCount: 0 }, 
-      category: 'Automotive Parts', 
-      industry: 'Automotive' 
-    },
-    { 
-      id: 263759, 
-      name: 'Chicago Pneumatic Screw Compressor', 
-      imageUrl: 'https://cdn.bazargpt.com/images/chicago-pneumatic-compressor.jpg', 
-      price: '₹4,00,000', 
-      priceUnit: null, 
-      brand: 'Chicago Pneumatics', 
-      supplier: { name: 'EUTAIR EQUIPMENTS LLP', location: 'Delhi' }, 
-      subcategory: { name: 'Air Compressor', productCount: 0 }, 
-      category: 'Industrial Machinery', 
-      industry: 'Manufacturing' 
-    }
+    
   ];
 
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>(staticProducts);
