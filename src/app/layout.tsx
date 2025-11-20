@@ -74,6 +74,11 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         
+        {/* Preload critical resources */}
+        <link rel="preload" href="/logo1.png" as="image" />
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" as="style" />
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" as="style" />
+        
         {/* Structured Data for SEO */}
         <script
           type="application/ld+json"
