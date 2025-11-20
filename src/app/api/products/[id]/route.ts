@@ -61,19 +61,28 @@ export async function GET(
 
     const transformedData = {
       id: product.id,
-      name: product.name,
-      imageUrl: product.imageUrl,
+      // Use modifiedName if available, otherwise use name
+      name: product.modifiedName || product.name,
+      // Use modifiedImageUrl if available, otherwise use imageUrl
+      imageUrl: product.modifiedImageUrl || product.imageUrl,
       price: product.price,
       priceUnit: product.priceUnit,
       brand: product.brand,
       specifications: product.specifications,
-      description: product.description || null,
+      // Use modifiedDescription if available, otherwise null
+      description: product.modifiedDescription || null,
       supplier: {
         id: product.supplier.id,
         name: product.supplier.name,
         location: product.supplier.location,
-        email: product.supplier.email || null,
-        phone: product.supplier.phone || null
+        // Mask email - show only first 2 and last 4 digits
+        email: product.supplier.email
+          ? `${product.supplier.email.slice(0, 2)}xxxxxxxxxx@${product.supplier.email.slice(-4)}`
+          : null,
+        // Mask phone number - show only last 2 digits
+        phone: product.supplier.mobile 
+          ? `+91XXXXXXXX${product.supplier.mobile.slice(-2)}` 
+          : null
       },
       breadcrumb: {
         sector: product.subcategory.category.sector.name,
@@ -82,8 +91,10 @@ export async function GET(
       },
       similarProducts: similarProducts.map(p => ({
         id: p.id,
-        name: p.name,
-        imageUrl: p.imageUrl,
+        // Use modifiedName if available, otherwise use name
+        name: p.modifiedName || p.name,
+        // Use modifiedImageUrl if available, otherwise use imageUrl
+        imageUrl: p.modifiedImageUrl || p.imageUrl,
         price: p.price,
         priceUnit: p.priceUnit,
         brand: p.brand,
