@@ -17,10 +17,9 @@ const nextConfig: NextConfig = {
       sideEffects: false,
     });
     
-    // Additional optimizations for unused code elimination
+    // Conservative optimization to avoid breaking best practices
     if (!dev && !isServer) {
       config.optimization.usedExports = true;
-      config.optimization.sideEffects = false;
     }
     
     // Optimize bundle splitting

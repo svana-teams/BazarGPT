@@ -7,19 +7,10 @@ import dynamic from 'next/dynamic';
 // Critical icons only - load immediately
 import { Search } from 'lucide-react';
 
-// Non-critical icons - load dynamically with loading states
-const Mail = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Mail })), { 
-  ssr: false,
-  loading: () => <span className="w-3 h-3 inline-block">📧</span>
-});
-const Phone = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Phone })), { 
-  ssr: false,
-  loading: () => <span className="w-3 h-3 inline-block">📞</span>
-});
-const X = dynamic(() => import('lucide-react').then(mod => ({ default: mod.X })), { 
-  ssr: false,
-  loading: () => <span className="w-5 h-5 inline-block">✕</span>
-});
+// Non-critical icons - load dynamically 
+const Mail = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Mail })), { ssr: false });
+const Phone = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Phone })), { ssr: false });
+const X = dynamic(() => import('lucide-react').then(mod => ({ default: mod.X })), { ssr: false });
 
 interface Message {
   id: string;
@@ -86,14 +77,6 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [industriesLoading, setIndustriesLoading] = useState(true);
   const [productsLoading, setProductsLoading] = useState(false); // No loading since we start with content
-  
-  // Performance optimization: prevent layout thrashing
-  const [isClient, setIsClient] = useState(false);
-  
-  useEffect(() => {
-    // Prevent hydration mismatches and forced reflows
-    setIsClient(true);
-  }, []);
   const [showRFQModal, setShowRFQModal] = useState(false);
   const [rfqForm, setRfqForm] = useState({
     productName: '',
@@ -509,8 +492,8 @@ export default function Home() {
         {!searchValue.trim() && (
           <>
             {/* Hero Banner - Optimized for LCP */}
-            <div className="hero-section rounded-lg p-6 lg:p-10 mb-6 lg:mb-8" style={{ backgroundColor: '#0D1B2A', contain: 'layout style paint', willChange: 'auto' }}>
-          <h1 className="hero-title text-2xl lg:text-4xl font-bold mb-3 font-sans" style={{ color: '#f0f0f0', willChange: 'auto' }}>Find Quality Products from Verified Suppliers</h1>
+            <div className="hero-section rounded-lg p-6 lg:p-10 mb-6 lg:mb-8" style={{ backgroundColor: '#0D1B2A' }}>
+          <h1 className="hero-title text-2xl lg:text-4xl font-bold mb-3 font-sans" style={{ color: '#f0f0f0' }}>Find Quality Products from Verified Suppliers</h1>
           <p className="mb-6 text-base lg:text-lg" style={{ color: '#e0e0e0' }}>Discover thousands of industrial products, machinery, and equipment from verified suppliers across India. Get instant quotes and connect with trusted manufacturers.</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
@@ -575,7 +558,7 @@ export default function Home() {
               <div className="flex items-center justify-between mb-4 lg:mb-6">
                 <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>Browse by Industry</h2>
               </div>
-              <div className="grid-responsive grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 w-full" style={{ contain: 'layout style' }}>
+              <div className="grid-responsive grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 w-full">
                 {topCategories.map((category, index) => {
                   const slug = industriesLoading || category.name === 'Loading...' ? '#' : 
                     `/industry/${category.name
@@ -671,7 +654,6 @@ export default function Home() {
                         loading={index < 4 ? "eager" : "lazy"} // Load first 4 images eagerly for better LCP
                         decoding="async"
                         fetchPriority={index < 2 ? "high" : "auto"}
-                        style={{ contentVisibility: index > 8 ? 'auto' : 'visible' }}
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                           const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
