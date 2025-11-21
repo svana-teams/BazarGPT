@@ -17,6 +17,12 @@ const nextConfig: NextConfig = {
       sideEffects: false,
     });
     
+    // Additional optimizations for unused code elimination
+    if (!dev && !isServer) {
+      config.optimization.usedExports = true;
+      config.optimization.sideEffects = false;
+    }
+    
     // Optimize bundle splitting
     if (!dev && !isServer) {
       config.optimization = {
@@ -119,6 +125,7 @@ const nextConfig: NextConfig = {
   // Optimize loading behavior
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
+    reactRemoveProperties: process.env.NODE_ENV === 'production' ? { properties: ['^data-test'] } : false,
   },
 
   // Optimize loading behavior 

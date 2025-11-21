@@ -21,7 +21,7 @@ db.connect()
 embedding = model.encode(query, normalize_embeddings=True).tolist()
 vector_str = ','.join(map(str, embedding))
 
-results = db.query_raw(f"SELECT id, name FROM \"Product\" ORDER BY embedding <=> '[{vector_str}]'::vector LIMIT 5")
+results = db.query_raw(f"SELECT id, COALESCE(\"modifiedName\", name) as display_name FROM \"Product\" ORDER BY embedding <=> '[{vector_str}]'::vector LIMIT 20")
 
 for row in results:
     print(row)

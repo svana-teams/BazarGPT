@@ -1,0 +1,13 @@
+{
+  "totalProcessed": 164929,
+  "totalMatched": 132168,
+  "totalUnmatched": 32761,
+  "matchTypes": {
+    "exact": 132159,
+    "normalized": 4,
+    "price": 5
+  },
+  "matchRate": "80.14%",
+  "categories": 265,
+  "uniqueSuppliers": 16356
+}

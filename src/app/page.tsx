@@ -86,6 +86,14 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [industriesLoading, setIndustriesLoading] = useState(true);
   const [productsLoading, setProductsLoading] = useState(false); // No loading since we start with content
+  
+  // Performance optimization: prevent layout thrashing
+  const [isClient, setIsClient] = useState(false);
+  
+  useEffect(() => {
+    // Prevent hydration mismatches and forced reflows
+    setIsClient(true);
+  }, []);
   const [showRFQModal, setShowRFQModal] = useState(false);
   const [rfqForm, setRfqForm] = useState({
     productName: '',
@@ -501,8 +509,8 @@ export default function Home() {
         {!searchValue.trim() && (
           <>
             {/* Hero Banner - Optimized for LCP */}
-            <div className="rounded-lg p-6 lg:p-10 mb-6 lg:mb-8" style={{ backgroundColor: '#0D1B2A', contain: 'layout style' }}>
-          <h1 className="text-2xl lg:text-4xl font-bold mb-3 font-sans" style={{ color: '#f0f0f0' }}>Find Quality Products from Verified Suppliers</h1>
+            <div className="hero-section rounded-lg p-6 lg:p-10 mb-6 lg:mb-8" style={{ backgroundColor: '#0D1B2A', contain: 'layout style paint', willChange: 'auto' }}>
+          <h1 className="hero-title text-2xl lg:text-4xl font-bold mb-3 font-sans" style={{ color: '#f0f0f0', willChange: 'auto' }}>Find Quality Products from Verified Suppliers</h1>
           <p className="mb-6 text-base lg:text-lg" style={{ color: '#e0e0e0' }}>Discover thousands of industrial products, machinery, and equipment from verified suppliers across India. Get instant quotes and connect with trusted manufacturers.</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
@@ -567,7 +575,7 @@ export default function Home() {
               <div className="flex items-center justify-between mb-4 lg:mb-6">
                 <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>Browse by Industry</h2>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 w-full">
+              <div className="grid-responsive grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 w-full" style={{ contain: 'layout style' }}>
                 {topCategories.map((category, index) => {
                   const slug = industriesLoading || category.name === 'Loading...' ? '#' : 
                     `/industry/${category.name
@@ -662,6 +670,8 @@ export default function Home() {
                         className="w-full h-full object-cover"
                         loading={index < 4 ? "eager" : "lazy"} // Load first 4 images eagerly for better LCP
                         decoding="async"
+                        fetchPriority={index < 2 ? "high" : "auto"}
+                        style={{ contentVisibility: index > 8 ? 'auto' : 'visible' }}
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                           const nextElement = e.currentTarget.nextElementSibling as HTMLElement;

@@ -1,0 +1,21 @@
+{
+  "totalProcessed": 164929,
+  "totalMatched": 137529,
+  "totalUnmatched": 27400,
+  "matchRate": "83.39%",
+  "matchStrategies": {
+    "exactNameSupplier": 132159,
+    "normalizedNameSupplier": 14,
+    "namePriceSupplier": 0,
+    "nameSupplierLocation": 126,
+    "modifiedNameSupplier": 4,
+    "namePrice": 39,
+    "priceSupplierLocation": 5187
+  },
+  "improvement": {
+    "previousMatches": 132168,
+    "newMatches": 137529,
+    "improvement": 5361,
+    "improvementPercentage": "4.06%"
+  }
+}

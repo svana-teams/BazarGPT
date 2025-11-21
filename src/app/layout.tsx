@@ -70,21 +70,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
         {/* Preload critical resources */}
         <link rel="preload" href="/logo1.png" as="image" />
         <link rel="preload" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" as="style" />
         <link rel="preload" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" as="style" />
         
-        {/* Performance hints for critical request chains */}
-        <link rel="preload" href="/_next/static/chunks/webpack.js" as="script" />
-        <link rel="preload" href="/_next/static/chunks/main-app.js" as="script" />
-        <link rel="modulepreload" href="/_next/static/chunks/512.js" />
-        <link rel="modulepreload" href="/_next/static/chunks/4bd1b696.js" />
+        {/* Performance hints for critical request chains - Better ordering */}
+        <link rel="preload" href="/_next/static/chunks/webpack.js" as="script" crossOrigin="anonymous" />
+        <link rel="preload" href="/_next/static/chunks/main-app.js" as="script" crossOrigin="anonymous" />
+        <link rel="preload" href="/_next/static/chunks/app-pages-browser.js" as="script" crossOrigin="anonymous" />
+        <link rel="modulepreload" href="/_next/static/chunks/512.js" crossOrigin="anonymous" />
+        <link rel="modulepreload" href="/_next/static/chunks/4bd1b696.js" crossOrigin="anonymous" />
+        
+        {/* Critical resource hints */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+        <link rel="preconnect" href="https://d91ztqmtx7u1k.cloudfront.net" crossOrigin="anonymous" />
         
         {/* Structured Data for SEO */}
         <script

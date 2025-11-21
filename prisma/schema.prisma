@@ -69,26 +69,26 @@ model Supplier {
 }
 
 model Product {
-  id                 Int                    @id @default(autoincrement())
-  name               String
-  imageUrl           String?
-  modifiedImageUrl   String?
-  price              String?                @db.VarChar(50)
-  priceUnit          String?                @db.VarChar(50)
-  brand              String?                @db.VarChar(255)
-  specifications     Json?
-  productDetailUrl   String?
-  modifiedName       String?                @db.VarChar(500)
-  modifiedDescription String?               @db.Text
-  imageDescription   String?                @db.VarChar(500)
-  subcategoryId      Int
-  supplierId         Int
-  createdAt          DateTime               @default(now())
-  updatedAt          DateTime               @updatedAt
-  embedding          Unsupported("vector")?
-  enquiries          Enquiry[]
-  subcategory        Subcategory            @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
-  supplier           Supplier               @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  id                  Int                    @id @default(autoincrement())
+  name                String
+  imageUrl            String?
+  price               String?                @db.VarChar(50)
+  priceUnit           String?                @db.VarChar(50)
+  brand               String?                @db.VarChar(255)
+  specifications      Json?
+  productDetailUrl    String?
+  subcategoryId       Int
+  supplierId          Int
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  embedding           Unsupported("vector")?
+  modifiedName        String?                @db.VarChar(500)
+  modifiedDescription String?
+  imageDescription    String?                @db.VarChar(500)
+  modifiedImageUrl    String?
+  enquiries           Enquiry[]
+  subcategory         Subcategory            @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  supplier            Supplier               @relation(fields: [supplierId], references: [id], onDelete: Cascade)
 
   @@index([subcategoryId])
   @@index([supplierId])
