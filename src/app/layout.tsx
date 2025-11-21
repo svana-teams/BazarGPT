@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Footer from "../components/Footer";
+import CriticalCSS from "../components/CriticalCSS";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -79,6 +80,12 @@ export default function RootLayout({
         <link rel="preload" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" as="style" />
         <link rel="preload" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" as="style" />
         
+        {/* Performance hints for critical request chains */}
+        <link rel="preload" href="/_next/static/chunks/webpack.js" as="script" />
+        <link rel="preload" href="/_next/static/chunks/main-app.js" as="script" />
+        <link rel="modulepreload" href="/_next/static/chunks/512.js" />
+        <link rel="modulepreload" href="/_next/static/chunks/4bd1b696.js" />
+        
         {/* Structured Data for SEO */}
         <script
           type="application/ld+json"
@@ -127,7 +134,9 @@ export default function RootLayout({
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{ fontDisplay: 'swap' }}
       >
+        <CriticalCSS />
         <div className="min-h-screen flex flex-col">
           <main className="flex-1">
             {children}

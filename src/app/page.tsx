@@ -7,10 +7,19 @@ import dynamic from 'next/dynamic';
 // Critical icons only - load immediately
 import { Search } from 'lucide-react';
 
-// Non-critical icons - load dynamically
-const Mail = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Mail })), { ssr: false });
-const Phone = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Phone })), { ssr: false });
-const X = dynamic(() => import('lucide-react').then(mod => ({ default: mod.X })), { ssr: false });
+// Non-critical icons - load dynamically with loading states
+const Mail = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Mail })), { 
+  ssr: false,
+  loading: () => <span className="w-3 h-3 inline-block">📧</span>
+});
+const Phone = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Phone })), { 
+  ssr: false,
+  loading: () => <span className="w-3 h-3 inline-block">📞</span>
+});
+const X = dynamic(() => import('lucide-react').then(mod => ({ default: mod.X })), { 
+  ssr: false,
+  loading: () => <span className="w-5 h-5 inline-block">✕</span>
+});
 
 interface Message {
   id: string;
@@ -651,7 +660,8 @@ export default function Home() {
                         src={product.imageUrl} 
                         alt={product.imageDescription || `${product.modifiedName || product.name} - Professional ${product.subcategory?.name || 'industrial product'} for commercial applications`}
                         className="w-full h-full object-cover"
-                        loading="lazy" // Lazy load images for better LCP
+                        loading={index < 4 ? "eager" : "lazy"} // Load first 4 images eagerly for better LCP
+                        decoding="async"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                           const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
