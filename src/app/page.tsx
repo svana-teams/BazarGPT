@@ -400,7 +400,7 @@ export default function Home() {
           <div className="flex gap-4">
             <span className="flex items-center gap-1">
               <Phone className="w-3 h-3" />
-              +91-8431209936
+              +91-7042692468
             </span>
             <span className="flex items-center gap-1">
               <Mail className="w-3 h-3" />
