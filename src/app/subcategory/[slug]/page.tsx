@@ -51,6 +51,25 @@ export default function SubcategoryPage() {
   const [validationError, setValidationError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const handleProductClick = (product: Product) => {
+    console.log('Product clicked:', product.name, 'ID:', product.id);
+    
+    // Generate slug
+    const slug = product.name
+      .toLowerCase()
+      .replace(/[&]/g, 'and')
+      .replace(/[^a-z0-9\s]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+    
+    const url = `/product/${slug}?id=${product.id}`;
+    console.log('Navigating to:', url);
+    
+    router.push(url);
+  };
+
+
   useEffect(() => {
     const fetchSubcategoryData = async () => {
       try {
@@ -304,6 +323,7 @@ export default function SubcategoryPage() {
               viewMode === 'grid' ? (
                 <div
                   key={product.id}
+                  onClick={() => handleProductClick(product)}
                   className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all cursor-pointer group"
                 >
                   <div className="bg-gray-100 h-32 sm:h-40 md:h-48 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
@@ -355,6 +375,7 @@ export default function SubcategoryPage() {
               ) : (
                 <div
                   key={product.id}
+                  onClick={() => handleProductClick(product)}
                   className="bg-white border border-gray-200 rounded-lg p-3 sm:p-4 hover:shadow-md transition-all cursor-pointer"
                 >
                   <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
