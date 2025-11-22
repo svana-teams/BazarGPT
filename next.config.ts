@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
       sideEffects: false,
     });
     
+    // Conservative optimization to avoid breaking best practices
+    if (!dev && !isServer) {
+      config.optimization.usedExports = true;
+    }
+    
     // Optimize bundle splitting
     if (!dev && !isServer) {
       config.optimization = {
@@ -26,14 +31,29 @@ const nextConfig: NextConfig = {
           cacheGroups: {
             default: false,
             vendors: false,
-            // Separate vendor chunk
+            // React vendor chunk
+            react: {
+              name: 'react',
+              chunks: 'all',
+              test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+              priority: 30,
+            },
+            // UI library chunk  
+            ui: {
+              name: 'ui',
+              chunks: 'all',
+              test: /[\\/]node_modules[\\/](lucide-react)[\\/]/,
+              priority: 25,
+            },
+            // Other vendor chunk
             vendor: {
               name: 'vendor',
               chunks: 'all',
-              test: /node_modules/,
+              test: /[\\/]node_modules[\\/]/,
               priority: 20,
+              reuseExistingChunk: true,
             },
-            // Separate common chunk
+            // Common components chunk
             common: {
               name: 'common',
               minChunks: 2,
@@ -99,6 +119,12 @@ const nextConfig: NextConfig = {
     'lucide-react': {
       transform: 'lucide-react/dist/esm/icons/{{member}}',
     },
+  },
+  
+  // Optimize loading behavior
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+    reactRemoveProperties: process.env.NODE_ENV === 'production' ? { properties: ['^data-test'] } : false,
   },
 
   // Optimize loading behavior 

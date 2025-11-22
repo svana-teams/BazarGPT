@@ -42,10 +42,25 @@ next-env.d.ts
 
 # Lighthouse performance audit files
 lighthouse-report*.html
+lighthouse*.html
+lighthouse*.json
 performance-*.json
-seo-audit.json
-full-audit.json
+seo-audit*.html
+seo-audit*.json
+full-audit*.html
+full-audit*.json
 lcp-*.json
+current-seo-audit.report.*
+
+# Large data files - product data, processing results
+*-failed-products*.json
+*-failed-products*.csv
+processed_products/
+downloaded_images_*/
+image_mapping_output/
+enhanced_image_mapping/
+original-image-mapping.*
+s3-upload-*.sh
 
 /src/generated/prisma
 

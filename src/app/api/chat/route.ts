@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-});
+}) : null;
 
 // Function to call Perplexity API
 async function callPerplexityAPI(productName: string) {
@@ -64,7 +64,7 @@ ${conversationText}
 
 Respond with ONLY "YES" if we have a product name and the user seems ready to search for suppliers, otherwise respond with "NO".`;
 
-    const analysisCompletion = await openai.chat.completions.create({
+    const analysisCompletion = await openai!.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'user', content: analysisPrompt }],
       max_tokens: 10,
@@ -90,7 +90,7 @@ Respond with ONLY "YES" if we have a product name and the user seems ready to se
       });
     }
 
-    const completion = await openai.chat.completions.create({
+    const completion = await openai!.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
         {

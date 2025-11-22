@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 // Critical icons only - load immediately
 import { Search } from 'lucide-react';
 
-// Non-critical icons - load dynamically
+// Non-critical icons - load dynamically 
 const Mail = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Mail })), { ssr: false });
 const Phone = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Phone })), { ssr: false });
 const X = dynamic(() => import('lucide-react').then(mod => ({ default: mod.X })), { ssr: false });
@@ -400,7 +400,7 @@ export default function Home() {
           <div className="flex gap-4">
             <span className="flex items-center gap-1">
               <Phone className="w-3 h-3" />
-              +91-8431209936
+              +91-7042692468
             </span>
             <span className="flex items-center gap-1">
               <Mail className="w-3 h-3" />
@@ -492,8 +492,8 @@ export default function Home() {
         {!searchValue.trim() && (
           <>
             {/* Hero Banner - Optimized for LCP */}
-            <div className="rounded-lg p-6 lg:p-10 mb-6 lg:mb-8" style={{ backgroundColor: '#0D1B2A', contain: 'layout style' }}>
-          <h1 className="text-2xl lg:text-4xl font-bold mb-3 font-sans" style={{ color: '#f0f0f0' }}>Find Quality Products from Verified Suppliers</h1>
+            <div className="hero-section rounded-lg p-6 lg:p-10 mb-6 lg:mb-8" style={{ backgroundColor: '#0D1B2A' }}>
+          <h1 className="hero-title text-2xl lg:text-4xl font-bold mb-3 font-sans" style={{ color: '#f0f0f0' }}>Find Quality Products from Verified Suppliers</h1>
           <p className="mb-6 text-base lg:text-lg" style={{ color: '#e0e0e0' }}>Discover thousands of industrial products, machinery, and equipment from verified suppliers across India. Get instant quotes and connect with trusted manufacturers.</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
@@ -568,7 +568,7 @@ export default function Home() {
                   <span>→</span>
                 </button>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 w-full">
+              <div className="grid-responsive grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 w-full">
                 {topCategories.map((category, index) => {
                   const slug = industriesLoading || category.name === 'Loading...' ? '#' : 
                     `/industry/${category.name
@@ -661,7 +661,9 @@ export default function Home() {
                         src={product.imageUrl} 
                         alt={product.imageDescription || `${product.modifiedName || product.name} - Professional ${product.subcategory?.name || 'industrial product'} for commercial applications`}
                         className="w-full h-full object-cover"
-                        loading="lazy" // Lazy load images for better LCP
+                        loading={index < 4 ? "eager" : "lazy"} // Load first 4 images eagerly for better LCP
+                        decoding="async"
+                        fetchPriority={index < 2 ? "high" : "auto"}
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                           const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
