@@ -557,6 +557,16 @@ export default function Home() {
             <div className="mb-8 lg:mb-12">
               <div className="flex items-center justify-between mb-4 lg:mb-6">
                 <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>Browse by Industry</h2>
+                <button
+                  onClick={() => router.push('/industries')}
+                  className="text-sm lg:text-base font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+                  style={{ color: '#FF6B00' }}
+                  onMouseOver={(e) => e.currentTarget.style.color = '#e55e00'}
+                  onMouseOut={(e) => e.currentTarget.style.color = '#FF6B00'}
+                >
+                  View All
+                  <span>→</span>
+                </button>
               </div>
               <div className="grid-responsive grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4 w-full">
                 {topCategories.map((category, index) => {
@@ -710,11 +720,13 @@ export default function Home() {
                   <h3 className="text-lg lg:text-xl font-bold mb-2" style={{ color: '#0D1B2A' }}>Get Your First Order</h3>
                   <p className="mb-3 text-sm lg:text-base text-gray-700">Special discount for new buyers</p>
                   <button
+                    onClick={() => router.push('/claim-offer')}
                     className="px-5 py-2 rounded-md font-semibold transition-all text-sm text-white shadow-sm"
                     style={{ backgroundColor: '#0D1B2A' }}
                     onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1E293B'}
                     onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#0D1B2A'}
                     aria-label="Claim special discount offer for new buyers"
+
                   >
                     Claim Offer
                   </button>
@@ -726,6 +738,7 @@ export default function Home() {
                   <h3 className="text-lg lg:text-xl font-bold mb-2" style={{ color: '#0D1B2A' }}>Trade Assurance</h3>
                   <p className="mb-3 text-sm lg:text-base text-gray-700">Protected payment for safe trading</p>
                   <button
+                    onClick={() => router.push('/learn-more')}
                     className="px-5 py-2 rounded-md font-semibold transition-all text-sm text-white shadow-sm"
                     style={{ backgroundColor: '#FF6B00' }}
                     onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e55e00'}
@@ -743,6 +756,16 @@ export default function Home() {
             <div className="mb-8 lg:mb-12">
               <div className="flex items-center justify-between mb-4 lg:mb-6">
                 <h2 className="text-xl lg:text-2xl font-bold" style={{ color: '#2D2C2C' }}>Featured Suppliers</h2>
+                <button
+                  onClick={() => router.push('/suppliers')}
+                  className="text-sm lg:text-base font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+                  style={{ color: '#FF6B00' }}
+                  onMouseOver={(e) => e.currentTarget.style.color = '#e55e00'}
+                  onMouseOut={(e) => e.currentTarget.style.color = '#FF6B00'}
+                >
+                  View All
+                  <span>→</span>
+                </button>
               </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
             {loading ? (
@@ -750,7 +773,7 @@ export default function Home() {
                 <div
                   key={idx}
                   className="bg-white border rounded-lg p-4 lg:p-6 animate-pulse"
-                  style={{ borderColor: '#e5e5e5' }}
+                  style={{ borderColor: '#e5e5e5', minHeight: '280px' }}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="w-12 h-12 rounded-full bg-gray-200"></div>
@@ -769,11 +792,12 @@ export default function Home() {
               featuredSuppliers.map((supplier, idx) => (
               <div
                 key={supplier.id}
-                className="bg-white border rounded-lg p-4 lg:p-6 hover:shadow-lg transition-all cursor-pointer"
-                style={{ borderColor: '#e5e5e5' }}
+                className="bg-white border rounded-lg p-4 lg:p-6 hover:shadow-lg transition-all cursor-pointer flex flex-col"
+                style={{ borderColor: '#e5e5e5', minHeight: '280px' }}
                 onMouseOver={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
                 onMouseOut={(e) => e.currentTarget.style.borderColor = '#e5e5e5'}
               >
+                {/* Header */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="w-12 h-12 rounded-full flex items-center justify-center text-2xl" style={{ backgroundColor: '#ffe8d9' }}>
                     🏭
@@ -787,15 +811,21 @@ export default function Home() {
                     </span>
                   )}
                 </div>
-                <h3 className="font-semibold mb-2 line-clamp-2" style={{ color: '#2D2C2C' }}>{supplier.name}</h3>
-                <div className="space-y-1 text-xs text-gray-600">
+                
+                {/* Supplier Name - Fixed Height */}
+                <h3 className="font-semibold mb-2 line-clamp-2 h-12" style={{ color: '#2D2C2C' }}>{supplier.name}</h3>
+                
+                {/* Details - Fixed Height, Flex-grow for spacing */}
+                <div className="space-y-1 text-xs text-gray-600 flex-grow mb-4">
                   <p>⭐ {supplier.rating} Rating</p>
                   <p>📦 {supplier.products} Products</p>
                   <p>📅 {supplier.years} Experience</p>
                   {supplier.location && <p>📍 {supplier.location}</p>}
                 </div>
+                
+                {/* Contact Button - Always at Bottom */}
                 <button
-                  className="mt-4 w-full py-2 border rounded-md transition-colors text-sm font-medium"
+                  className="w-full py-2 border rounded-md transition-colors text-sm font-medium cursor-pointer mt-auto"
                   style={{ borderColor: '#000000', color: '#000000' }}
                   onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#f5f5f5'}
                   onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
